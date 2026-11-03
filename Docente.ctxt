@@ -1,0 +1,21 @@
+#BlueJ class context
+#Tue Nov 03 11:38:12 ART 2026
+comment0.target=Docente
+comment0.text=\r\n Clase que representa a un socio docente de la biblioteca.\r\n Comienza con 5 d\u00EDas de pr\u00E9stamo y no tiene l\u00EDmite de cantidad de libros.\r\n\r\n @author Axel Gabriel Nu\u00F1ez\r\n @version 2026\r\n
+comment1.params=p_dniSocio p_nombre p_area
+comment1.target=Docente(int, java.lang.String, java.lang.String)
+comment1.text=\r\n Inicializa un docente con sus datos y un plazo de pr\u00E9stamo de 5 d\u00EDas.\r\n\r\n @param p_dniSocio DNI del docente.\r\n @param p_nombre Nombre y apellido del docente.\r\n @param p_area \u00C1rea en la que se desempe\u00F1a el docente.\r\n
+comment2.params=p_dniSocio p_nombre p_prestamos p_area
+comment2.target=Docente(int, java.lang.String, java.util.ArrayList, java.lang.String)
+comment2.text=\r\n Inicializa un docente con sus datos, una colecci\u00F3n de pr\u00E9stamos existente\r\n y un plazo inicial de pr\u00E9stamo de 5 d\u00EDas.\r\n\r\n @param p_dniSocio DNI del docente.\r\n @param p_nombre Nombre y apellido del docente.\r\n @param p_prestamos Colecci\u00F3n de pr\u00E9stamos del docente.\r\n @param p_area \u00C1rea en la que se desempe\u00F1a el docente.\r\n
+comment3.params=p_area
+comment3.target=void setArea(java.lang.String)
+comment4.target=java.lang.String getArea()
+comment5.target=boolean esResponsable()
+comment5.text=\r\n Comprueba que el docente nunca haya tenido ni tenga pr\u00E9stamos vencidos.\r\n Para los pr\u00E9stamos devueltos utiliza la fecha de devoluci\u00F3n y para\r\n los pendientes utiliza la fecha actual.\r\n La colecci\u00F3n de pr\u00E9stamos debe conservar el historial completo.\r\n\r\n @return true si todos sus pr\u00E9stamos est\u00E1n o fueron devueltos en t\u00E9rmino,\r\n         incluso si todav\u00EDa no realiz\u00F3 pr\u00E9stamos; false en caso contrario.\r\n
+comment6.params=p_dias
+comment6.target=void cambiarDiasDePrestamo(int)
+comment6.text=\r\n Adiciona d\u00EDas al plazo de pr\u00E9stamo que tiene actualmente el docente.\r\n\r\n @param p_dias Cantidad de d\u00EDas que se agregan al plazo actual.\r\n
+comment7.target=java.lang.String soyDeLaClase()
+comment7.text=\r\n Devuelve el tipo de socio al que pertenece el docente.\r\n\r\n @return La cadena "Docente".\r\n
+numComments=8

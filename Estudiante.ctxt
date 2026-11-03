@@ -1,0 +1,18 @@
+#BlueJ class context
+#Tue Nov 03 11:29:40 ART 2026
+comment0.target=Estudiante
+comment0.text=\r\n Clase que representa a un socio estudiante de la biblioteca,\r\n con un plazo de 20 d\u00EDas y un m\u00E1ximo de 3 libros prestados a la vez.\r\n\r\n @author Axel Gabriel Nu\u00F1ez\r\n @version 2026\r\n
+comment1.params=p_dniSocio p_nombre p_carrera
+comment1.target=Estudiante(int, java.lang.String, java.lang.String)
+comment1.text=\r\n Inicializa un estudiante con sus datos y un plazo de pr\u00E9stamo de 20 d\u00EDas.\r\n\r\n @param p_dniSocio DNI del estudiante.\r\n @param p_nombre Nombre y apellido del estudiante.\r\n @param p_carrera Carrera que cursa el estudiante.\r\n
+comment2.params=p_dniSocio p_nombre p_carrera p_prestamos
+comment2.target=Estudiante(int, java.lang.String, java.lang.String, java.util.ArrayList)
+comment2.text=\r\n Inicializa un estudiante con una colecci\u00F3n de pr\u00E9stamos existente\r\n y un plazo de pr\u00E9stamo de 20 d\u00EDas.\r\n\r\n @param p_dniSocio DNI del estudiante.\r\n @param p_nombre Nombre y apellido del estudiante.\r\n @param p_carrera Carrera que cursa el estudiante.\r\n @param p_prestamos Colecci\u00F3n de pr\u00E9stamos del estudiante, distinta de null.\r\n
+comment3.params=p_carrera
+comment3.target=void setCarrera(java.lang.String)
+comment4.target=java.lang.String getCarrera()
+comment5.target=boolean puedePedir()
+comment5.text=\r\n Comprueba que el estudiante no tenga pr\u00E9stamos vencidos y que posea\r\n menos de 3 libros, para no superar ese m\u00E1ximo al realizar otro pr\u00E9stamo.\r\n\r\n @return true si puede pedir otro libro, false en caso contrario.\r\n
+comment6.target=java.lang.String soyDeLaClase()
+comment6.text=\r\n Devuelve el tipo de socio al que pertenece el estudiante.\r\n\r\n @return La cadena "Estudiante".\r\n
+numComments=7
