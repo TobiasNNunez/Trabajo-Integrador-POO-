@@ -1,0 +1,32 @@
+#BlueJ class context
+#Tue Nov 03 13:47:25 ART 2026
+comment0.target=Libro
+comment0.text=\r\n Clase que representa un ejemplar de libro perteneciente a una biblioteca.\r\n Almacena sus datos bibliograficos y conserva el historial de los\r\n prestamos realizados sobre el ejemplar.\r\n\r\n @author Otero Emmanuel David\r\n @version 1.0 (TP7 - Trabajo Final Integrador POO)\r\n
+comment1.params=p_titulo p_edicion p_editorial p_anio
+comment1.target=Libro(java.lang.String, int, java.lang.String, int)
+comment1.text=\r\n Constructor para inicializar un libro con sus datos bibliograficos\r\n y una coleccion vacia de prestamos.\r\n\r\n @param p_titulo Titulo del libro.\r\n @param p_edicion Numero de edicion del libro.\r\n @param p_editorial Editorial del libro.\r\n @param p_anio Anio de publicacion del libro.\r\n
+comment10.target=boolean prestado()
+comment10.text=\r\n Determina si el ejemplar se encuentra actualmente prestado.\r\n Consulta la fecha de devolucion del ultimo prestamo.\r\n Si no existe una fecha de devolucion, el ejemplar\r\n continua prestado.\r\n\r\n @return true si el ejemplar esta prestado,\r\n         false si esta disponible.\r\n
+comment11.target=java.lang.String toString()
+comment11.text=\r\n Devuelve una representacion textual del libro,\r\n respetando el formato solicitado en la consigna.\r\n\r\n @return Cadena con el formato "Titulo\: <titulo>".\r\n
+comment2.params=p_titulo
+comment2.target=void setTitulo(java.lang.String)
+comment2.text=\r\n Modifica el titulo del libro.\r\n\r\n @param p_titulo Nuevo titulo del libro.\r\n
+comment3.params=p_edicion
+comment3.target=void setEdicion(int)
+comment3.text=\r\n Modifica el numero de edicion del libro.\r\n\r\n @param p_edicion Nueva edicion del libro.\r\n
+comment4.params=p_editorial
+comment4.target=void setEditorial(java.lang.String)
+comment4.text=\r\n Modifica la editorial del libro.\r\n\r\n @param p_editorial Nueva editorial del libro.\r\n
+comment5.params=p_anio
+comment5.target=void setAnio(int)
+comment5.text=\r\n Modifica el anio de publicacion del libro.\r\n\r\n @param p_anio Nuevo anio de publicacion.\r\n
+comment6.target=java.lang.String getTitulo()
+comment6.text=\r\n Devuelve el titulo del libro.\r\n\r\n @return Titulo del libro.\r\n
+comment7.target=int getEdicion()
+comment7.text=\r\n Devuelve el numero de edicion del libro.\r\n\r\n @return Edicion del libro.\r\n
+comment8.target=java.lang.String getEditorial()
+comment8.text=\r\n Devuelve la editorial del libro.\r\n\r\n @return Editorial del libro.\r\n
+comment9.target=int getAnio()
+comment9.text=\r\n Devuelve el anio de publicacion del libro.\r\n\r\n @return Anio de publicacion.\r\n
+numComments=12
