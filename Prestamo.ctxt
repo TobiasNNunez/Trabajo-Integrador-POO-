@@ -1,0 +1,21 @@
+#BlueJ class context
+#Tue Nov 03 15:16:07 ART 2026
+comment0.target=Prestamo
+comment0.text=\r\n @author Tobias Nu\u00F1ez\r\n
+comment1.params=p_fechaRetiro
+comment1.target=void setFechaRetiro(java.util.Calendar)
+comment10.target=java.lang.String toString()
+comment2.params=p_fechaDevolucion
+comment2.target=void setFechaDevolucion(java.util.Calendar)
+comment3.params=p_socio
+comment3.target=void setSocio(Socio)
+comment4.target=java.util.Calendar getFechaRetiro()
+comment5.target=java.util.Calendar getFechaDevolucion()
+comment6.target=Socio getSocio()
+comment7.params=p_fecha
+comment7.target=void registrarFechaDevolucion(java.util.Calendar)
+comment8.params=p_fecha
+comment8.target=boolean vencido(java.util.Calendar)
+comment9.params=p_fecha
+comment9.target=java.lang.String armarFecha(java.util.Calendar)
+numComments=11
