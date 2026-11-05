@@ -1,5 +1,5 @@
 #BlueJ class context
-#Tue Nov 03 11:38:12 ART 2026
+#Thu Nov 05 20:46:45 ART 2026
 comment0.target=Docente
 comment0.text=\r\n Clase que representa a un socio docente de la biblioteca.\r\n Comienza con 5 d\u00EDas de pr\u00E9stamo y no tiene l\u00EDmite de cantidad de libros.\r\n\r\n @author Axel Gabriel Nu\u00F1ez\r\n @version 2026\r\n
 comment1.params=p_dniSocio p_nombre p_area

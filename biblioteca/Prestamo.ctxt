@@ -1,0 +1,34 @@
+#BlueJ class context
+#Thu Nov 05 20:47:40 ART 2026
+comment0.target=Prestamo
+comment0.text=\r\n Representa el prestamo de un libro a un socio de la biblioteca.\r\n Vincula el libro y el socio, administrando las fechas y su vencimiento.\r\n \r\n @author Tobias Nu\u00F1ez\r\n
+comment1.params=p_fechaRetiro p_socio p_libro
+comment1.target=Prestamo(java.util.Calendar, Socio, Libro)
+comment1.text=\r\n Constructor para un prestamo nuevo. Inicia con fecha de devolucion en null (activo).\r\n
+comment10.target=Libro getLibro()
+comment11.params=p_fecha
+comment11.target=void registrarFechaDevolucion(java.util.Calendar)
+comment11.text=\r\n Registra la fecha en la que se devuelve el ejemplar a la biblioteca.\r\n
+comment12.params=p_fecha
+comment12.target=boolean vencido(java.util.Calendar)
+comment12.text=\r\n Evalua si el prestamo esta vencido respecto a una fecha dada.\r\n Crea un Calendar nuevo con a\u00F1o/mes/dia de retiro para no modificar la fecha original.\r\n
+comment13.params=p_fecha
+comment13.target=java.lang.String armarFecha(java.util.Calendar)
+comment13.text=\r\n Formatea la fecha a AAAA/MM/DD o indica si la devolucion sigue pendiente.\r\n
+comment14.target=java.lang.String toString()
+comment14.text=\r\n Retorna la informacion del prestamo con el formato requerido.\r\n
+comment2.params=p_fechaRetiro p_fechaDevolucion p_socio p_libro
+comment2.target=Prestamo(java.util.Calendar, java.util.Calendar, Socio, Libro)
+comment2.text=\r\n Constructor sobrecargado para prestamos con fecha de devolucion ya registrada.\r\n
+comment3.params=p_fechaRetiro
+comment3.target=void setFechaRetiro(java.util.Calendar)
+comment4.params=p_fechaDevolucion
+comment4.target=void setFechaDevolucion(java.util.Calendar)
+comment5.params=p_socio
+comment5.target=void setSocio(Socio)
+comment6.params=p_libro
+comment6.target=void setLibro(Libro)
+comment7.target=java.util.Calendar getFechaRetiro()
+comment8.target=java.util.Calendar getFechaDevolucion()
+comment9.target=Socio getSocio()
+numComments=15

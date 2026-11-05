@@ -1,0 +1,27 @@
+#BlueJ class context
+#Thu Nov 05 20:46:45 ART 2026
+comment0.target=Socio
+comment0.text=\r\n @author Tobias Nu\u00F1ez\r\n
+comment1.params=p_dniSocio p_nombre p_diasPrestamo
+comment1.target=Socio(int, java.lang.String, int)
+comment10.target=java.util.ArrayList getPrestamos()
+comment11.params=p_prestamo
+comment11.target=void agregarPrestamo(Prestamo)
+comment12.target=int cantLibrosPrestados()
+comment13.target=boolean puedePedir()
+comment14.target=java.lang.String soyDeLaClase()
+comment15.target=java.lang.String toString()
+comment2.params=p_dniSocio p_nombre p_diasPrestamo p_prestamos
+comment2.target=Socio(int, java.lang.String, int, java.util.ArrayList)
+comment3.params=p_dniSocio
+comment3.target=void setDniSocio(int)
+comment4.params=p_nombre
+comment4.target=void setNombre(java.lang.String)
+comment5.params=p_diasPrestamo
+comment5.target=void setDiasPrestamo(int)
+comment6.params=p_prestamos
+comment6.target=void setPrestamos(java.util.ArrayList)
+comment7.target=int getDniSocio()
+comment8.target=java.lang.String getNombre()
+comment9.target=int getDiasPrestamo()
+numComments=16

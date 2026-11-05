@@ -1,5 +1,5 @@
 #BlueJ class context
-#Tue Nov 03 11:29:40 ART 2026
+#Thu Nov 05 20:46:45 ART 2026
 comment0.target=Estudiante
 comment0.text=\r\n Clase que representa a un socio estudiante de la biblioteca,\r\n con un plazo de 20 d\u00EDas y un m\u00E1ximo de 3 libros prestados a la vez.\r\n\r\n @author Axel Gabriel Nu\u00F1ez\r\n @version 2026\r\n
 comment1.params=p_dniSocio p_nombre p_carrera
