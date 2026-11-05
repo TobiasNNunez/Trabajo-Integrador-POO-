@@ -1,0 +1,17 @@
+#BlueJ class context
+#Wed Nov 04 16:25:25 ART 2026
+comment0.target=Biblioteca
+comment1.params=p_nombre
+comment1.target=Biblioteca(java.lang.String)
+comment2.params=p_nombre
+comment2.target=void setNombre(java.lang.String)
+comment3.target=java.lang.String getNombre()
+comment4.params=p_titulo p_edicion p_editorial p_anio
+comment4.target=void nuevoLibro(java.lang.String, int, java.lang.String, int)
+comment5.params=p_dniSocio p_nombre p_carrera
+comment5.target=void nuevoSocioEstudiante(int, java.lang.String, java.lang.String)
+comment6.params=p_dniSocio p_nombre p_area
+comment6.target=void nuevoSocioDocente(int, java.lang.String, java.lang.String)
+comment7.params=p_objeto
+comment7.target=int cantidadDeSociosPorTipo(java.lang.String)
+numComments=8
