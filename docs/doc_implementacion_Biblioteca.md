@@ -91,3 +91,97 @@ Se aplicaron los conceptos de encapsulamiento, constructores, colecciones genér
 Se comprobaron las altas de libros y socios, el otorgamiento y rechazo de préstamos, la devolución de ejemplares, el conteo por tipo de socio y la obtención de préstamos vencidos.
 
 **Integración pendiente:** Incorporar la segunda parte de los métodos de `Biblioteca` y realizar las pruebas integrales del paquete.
+
+## Documentación — Clase Biblioteca (Últimos 7 métodos) y LibroNoPrestadoException
+
+**Implementación realizada**
+
+Se implementó la clase `LibroNoPrestadoException` y los últimos siete métodos de consulta, búsqueda y generación de reportes de la clase `Biblioteca` dentro del paquete `biblioteca` (`docentesResponsables`, `quienTieneElLibro`, `buscarSocio`, `listaDeSocios`, `listaDeLibros`, `listaDeTitulos` y `listaDeDocentesResponsables`).
+
+Se aplicaron los conceptos de herencia, manejo de excepciones verificadas (`throws` y `throw`), colecciones genéricas, reflexión de tipos (`instanceof` y *downcasting*), colaboración entre objetos, polimorfismo y redefinición de `toString()`.
+
+### Clase: LibroNoPrestadoException
+
+**Qué hace:** Define una excepción verificada que indica que se intentó devolver o consultar el préstamo de un ejemplar que se encuentra disponible en la biblioteca.
+
+**Cómo se implementó y qué conceptos de POO se aplicaron:** La clase extiende de `Exception` (herencia) e implementa el constructor `LibroNoPrestadoException(String p_mensaje)` invocando a `super(p_mensaje)`.
+
+**Por qué se eligió esa solución:** Permite representar una condición de error propia del dominio y exigir su tratamiento mediante el mecanismo de excepciones de Java.
+
+**Caso comprobado y resultado:** Al lanzarse la excepción, conserva y devuelve correctamente el mensaje recibido por parámetro.
+
+### Método: docentesResponsables()
+
+**Qué hace:** Obtiene y retorna una colección con todos los socios de tipo `Docente` que nunca tuvieron ni tienen un préstamo vencido.
+
+**Cómo se implementó y qué conceptos de POO se aplicaron:** Se recorre `this.getSocios()` con un `for-each`, se verifica si el socio es instancia de `Docente` mediante `instanceof`, se realiza *downcasting* (`(Docente) s`) y se consulta `unDocente.esResponsable()`.
+
+**Por qué se eligió esa solución:** Como `esResponsable()` es un método propio de la subclase `Docente` y no de `Socio`, es necesario comprobar el tipo real del objeto antes de realizar el casteo e invocar el método.
+
+**Caso comprobado y resultado:** Retorna únicamente los docentes responsables, excluyendo a los estudiantes y a los docentes con préstamos vencidos.
+
+### Método: quienTieneElLibro(Libro p_libro)
+
+**Qué hace:** Devuelve el nombre del socio que tiene prestado el ejemplar indicado, o lanza `LibroNoPrestadoException` si el ejemplar se encuentra disponible.
+
+**Cómo se implementó y qué conceptos de POO se aplicaron:** Se evalúa `p_libro.prestado()`. Si está prestado, se obtiene el nombre mediante colaboración entre objetos (`p_libro.ultimoPrestamo().getSocio().getNombre()`). Si no está prestado, se lanza `throw new LibroNoPrestadoException("El libro se encuentra en la biblioteca")`.
+
+**Por qué se eligió esa solución:** Cumple con la firma y el manejo de excepciones requeridos por el enunciado cuando se consulta un ejemplar que no está prestado.
+
+**Caso comprobado y resultado:** Con un libro prestado retorna el nombre del socio; con un libro disponible en biblioteca lanza `LibroNoPrestadoException`.
+
+### Método: buscarSocio(int p_dni)
+
+**Qué hace:** Busca un socio registrado en la biblioteca a partir de su número de DNI y lo retorna, o devuelve `null` si no existe.
+
+**Cómo se implementó y qué conceptos de POO se aplicaron:** Se recorre la colección `this.getSocios()` con un `for-each` comparando `s.getDniSocio() == p_dni`.
+
+**Por qué se eligió esa solución:** Permite localizar directamente la referencia de cualquier socio (estudiante o docente) mediante su identificador único.
+
+**Caso comprobado y resultado:** Con un DNI registrado retorna el objeto `Socio` correspondiente; con un DNI inexistente retorna `null`.
+
+### Método: listaDeSocios()
+
+**Qué hace:** Genera un listado numerado de los socios registrados junto con el total de socios de tipo `Estudiante` y `Docente`.
+
+**Cómo se implementó y qué conceptos de POO se aplicaron:** Se recorre `this.getSocios()` concatenando el número de orden y `s.toString()` (polimorfismo), y al final se invoca `this.cantidadDeSociosPorTipo("Estudiante")` y `this.cantidadDeSociosPorTipo("Docente")`.
+
+**Por qué se eligió esa solución:** Reutiliza los métodos polimórficos de las subclases y el conteo por tipo, respetando el formato exacto de salida solicitado por la cátedra.
+
+**Caso comprobado y resultado:** Devuelve la cadena formateada con todos los socios numerados y el resumen de cantidades por tipo entre líneas de asteriscos.
+
+### Método: listaDeLibros()
+
+**Qué hace:** Genera un listado numerado de todos los ejemplares de la biblioteca indicando para cada uno si se encuentra prestado (`Si` o `No`).
+
+**Cómo se implementó y qué conceptos de POO se aplicaron:** Se recorre `this.getLibros()` consultando `l.prestado()` para definir el estado `"Si"` o `"No"`, y se concatena con `l.toString()`.
+
+**Por qué se eligió esa solución:** Delega la consulta del estado de préstamo en cada ejemplar y construye el listado con el formato requerido.
+
+**Caso comprobado y resultado:** Devuelve el listado numerado mostrando los datos de cada libro y `Prestado: (Si)` o `Prestado: (No)` según corresponda.
+
+### Método: listaDeTitulos()
+
+**Qué hace:** Genera un listado con los títulos de los libros de la biblioteca sin repetir aquellos que poseen múltiples ejemplares.
+
+**Cómo se implementó y qué conceptos de POO se aplicaron:** Se utiliza una lista auxiliar `ArrayList<String> titulos` y, al recorrer `this.getLibros()`, se verifica `!titulos.contains(titulo)` antes de agregarlo y concatenarlo al resultado.
+
+**Por qué se eligió esa solución:** Permite filtrar títulos repetidos de forma sencilla manteniendo el orden en que fueron registrados en la biblioteca.
+
+**Caso comprobado y resultado:** Si existen dos o más ejemplares con el mismo título, el título aparece una única vez en el listado.
+
+### Método: listaDeDocentesResponsables()
+
+**Qué hace:** Genera un listado con los datos de todos los docentes responsables registrados en la biblioteca.
+
+**Cómo se implementó y qué conceptos de POO se aplicaron:** Se invoca al método `this.docentesResponsables()` y se recorre la colección resultante con un `for-each`, concatenando `"* " + unDocente.toString()`.
+
+**Por qué se eligió esa solución:** Reutiliza la lógica de filtrado ya implementada en `docentesResponsables()` y formatea la salida de acuerdo con el enunciado.
+
+**Caso comprobado y resultado:** Devuelve el listado precedido por asteriscos únicamente con los docentes que no registran vencimientos.
+
+### Validación realizada
+
+Se comprobaron los siete métodos de consulta, búsqueda y listados junto con el lanzamiento de `LibroNoPrestadoException`, verificando el filtrado de docentes responsables, la búsqueda por DNI, la exclusión de títulos repetidos y el formato de cada reporte.
+
+**Integración pendiente:** Compilar y ejecutar el proyecto completo con las clases definitivas de los compañeros y obtener la revisión de otro integrante.
