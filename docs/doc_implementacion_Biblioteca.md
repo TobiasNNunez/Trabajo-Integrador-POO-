@@ -90,7 +90,6 @@ Se aplicaron los conceptos de encapsulamiento, constructores, colecciones genér
 
 Se comprobaron las altas de libros y socios, el otorgamiento y rechazo de préstamos, la devolución de ejemplares, el conteo por tipo de socio y la obtención de préstamos vencidos.
 
-**Integración pendiente:** Incorporar la segunda parte de los métodos de `Biblioteca` y realizar las pruebas integrales del paquete.
 
 ## Documentación — Clase Biblioteca (Últimos 7 métodos) y LibroNoPrestadoException
 
