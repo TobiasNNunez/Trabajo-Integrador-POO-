@@ -1,4 +1,11 @@
 TP7 - Gestión de Biblioteca
+Integrantes: Miño Martin
+             Nuñez Axel Gabriel
+             Nuñez Tobias Nahuel
+             Otero Emmanuel David
+             Prieto Cesar Gabriel
+             Elias Torres
+
 Ejecución desde BlueJ
 
 1. Abrí BlueJ con Java 21. Desde Proyecto > Abrir proyecto, elegí la
