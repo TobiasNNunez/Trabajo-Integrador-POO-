@@ -16,7 +16,7 @@ La clase `RepositorioBiblioteca` cumple la función de **objeto de acceso a dato
 
 ### `cargarTodo(Biblioteca p_biblioteca)`
 
-Al arrancar, `GestionBiblioteca` carga una instancia nueva de `Biblioteca` si la tabla `libros` ya contiene filas. El repositorio incorpora los datos en el siguiente orden, de modo que los objetos de cada préstamo estén disponibles al reconstruirlo.
+Al arrancar, `GestionBiblioteca` e `Interfaz` cargan una instancia nueva de `Biblioteca`. El repositorio incorpora los datos en el siguiente orden, de modo que los objetos de cada préstamo estén disponibles al reconstruirlo.
 
 1. `cargarLibros(p_biblioteca)`
 2. `cargarSocios(p_biblioteca)`
@@ -46,14 +46,15 @@ Ejecuta `SELECT id_libro, dni_socio, fecha_retiro, fecha_devolucion FROM prestam
 
 ## 3. Métodos de Persistencia (Mutaciones en SQLite)
 
-Los `INSERT` y `UPDATE` usan `PreparedStatement` para mantener los valores separados del SQL. Se asignan a cada `?` mediante `setInt(...)` o `setString(...)`. El método auxiliar `ejecutarUnaFila(...)` comprueba que `executeUpdate()` afecte exactamente una fila. `Biblioteca` actualiza su estado en memoria cuando la escritura se completa sin error.
+Los `INSERT`, `UPDATE` y `DELETE` usan `PreparedStatement` para mantener los valores separados del SQL. Se asignan a cada `?` mediante `setInt(...)` o `setString(...)`. El método auxiliar `ejecutarUnaFila(...)` comprueba que `executeUpdate()` afecte exactamente una fila. `Biblioteca` actualiza su estado en memoria cuando la escritura se completa sin error.
 
 - **`insertarLibro(titulo, edicion, editorial, anio)`** guarda el ejemplar y luego consulta `SELECT MAX(id) FROM libros` con un `Statement` en la misma conexión. En el uso previsto, una sola sesión escribe en la base y el máximo corresponde al ejemplar recién insertado. La consulta observa el mayor ID de la tabla en ese momento y puede devolver el ID de otro libro si hay escrituras de otras sesiones entre las dos sentencias.
 - **`guardarSocio(Socio p_socio)`** inserta los datos comunes en `socios`. Obtiene el tipo con `soyDeLaClase()` y accede a `carrera` o `area` según la subclase.
 - **`guardarPrestamo(Prestamo p_prestamo)`** registra el ID del libro, el DNI del socio y la fecha de retiro de `armarFecha(...)`. Usa `NULL` para la devolución mientras el préstamo está activo. Las claves foráneas protegen las referencias y el índice único parcial impide un segundo préstamo activo para el ejemplar.
 - **`registrarDevolucion(Libro p_libro, Calendar p_fechaDevolucion)`** actualiza la fecha de la fila que coincide con el ID del ejemplar y cumple `fecha_devolucion IS NULL`. El índice garantiza que exista como máximo una fila activa por ejemplar. La comprobación de filas afectadas permite detectar una devolución sin préstamo activo en SQLite.
 - **`actualizarDiasDocente(Docente p_docente, int p_nuevoPlazo)`** guarda el nuevo plazo en `socios` para el DNI del docente. `Biblioteca` calcula ese valor y actualiza al docente en memoria después de guardarlo.
-- **`estaVacia()`** ejecuta `SELECT COUNT(*) FROM libros` al arrancar. Si el conteo da cero, la aplicación precarga los datos de ejemplo. La decisión se basa en la tabla `libros`.
+- **`eliminarLibro(int p_id)` y `eliminarSocio(int p_dni)`** ejecutan `DELETE` por ID de ejemplar o DNI. Las claves foráneas con `ON DELETE RESTRICT` protegen los registros vinculados a cualquier préstamo, incluso uno devuelto.
+- **`estaVacia()`** ejecuta `SELECT COUNT(*) FROM libros` y devuelve si la tabla está vacía. La consulta solo cuenta ejemplares.
 
 ---
 

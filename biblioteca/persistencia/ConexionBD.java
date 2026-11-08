@@ -14,8 +14,18 @@ import java.sql.Statement;
  * Las rutas del archivo de datos y del esquema son relativas a la carpeta de ejecución.
  */
 public class ConexionBD {
-    private static final String URL = "jdbc:sqlite:biblioteca/persistencia/biblioteca.db";
+    private static final String RUTA_BD = "biblioteca/persistencia/biblioteca.db";
+    private static final String URL = "jdbc:sqlite:" + RUTA_BD;
     private static final String RUTA_SQL = "biblioteca/persistencia/schema.sql";
+
+    /**
+     * Comprueba si el archivo de SQLite ya existe antes de abrir la conexión.
+     *
+     * @return {@code true} si el archivo de la base está presente.
+     */
+    public static boolean existeBaseDeDatos() {
+        return new File(RUTA_BD).isFile();
+    }
     
     /**
      * Abre una conexión con el archivo SQLite y habilita las claves foráneas

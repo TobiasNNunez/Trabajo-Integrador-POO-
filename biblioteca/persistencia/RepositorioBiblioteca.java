@@ -246,6 +246,48 @@ public class RepositorioBiblioteca {
     }
     
     /**
+     * Elimina de SQLite el ejemplar que corresponde al ID recibido.
+     *
+     * @param p_id Identificador del ejemplar.
+     * @throws IllegalStateException Si SQLite rechaza la baja o no se elimina una fila.
+     */
+    public void eliminarLibro(int p_id) {
+        eliminarRegistro("DELETE FROM libros WHERE id = ?;", p_id, "ejemplar");
+    }
+
+    /**
+     * Elimina de SQLite el socio que corresponde al DNI recibido.
+     *
+     * @param p_dni DNI del socio.
+     * @throws IllegalStateException Si SQLite rechaza la baja o no se elimina una fila.
+     */
+    public void eliminarSocio(int p_dni) {
+        eliminarRegistro("DELETE FROM socios WHERE dni = ?;", p_dni, "socio");
+    }
+
+    /**
+     * Ejecuta una baja por clave con las restricciones del esquema activadas.
+     *
+     * @param p_sql Sentencia DELETE preparada para recibir una clave.
+     * @param p_clave ID del ejemplar o DNI del socio.
+     * @param p_tipo Nombre del registro que se incluye en el mensaje de error.
+     * @throws IllegalStateException Si la baja falla o no afecta una fila.
+     */
+    private void eliminarRegistro(String p_sql, int p_clave, String p_tipo) {
+        Connection con = null;
+        try {
+            con = ConexionBD.obtenerConexion();
+            PreparedStatement ps = con.prepareStatement(p_sql);
+            ps.setInt(1, p_clave);
+            ejecutarUnaFila(ps);
+        } catch (SQLException e) {
+            throw new IllegalStateException("Error al quitar " + p_tipo + " de SQLite: " + e.getMessage(), e);
+        } finally {
+            ConexionBD.cerrarConexion(con);
+        }
+    }
+
+    /**
      * Inserta un préstamo activo con el ID del ejemplar, el DNI del socio y
      * la fecha de retiro formateada por {@link Prestamo#armarFecha(Calendar)}.
      * La fecha de devolución queda en {@code NULL}.

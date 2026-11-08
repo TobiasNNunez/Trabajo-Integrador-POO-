@@ -12,8 +12,8 @@ import biblioteca.persistencia.ConexionBD;
  */
 public class GestionBiblioteca {
     /**
-     * Inicializa el esquema y precarga los ejemplos si la tabla de ejemplares
-     * está vacía. En los demás arranques recupera el catálogo. Un fallo de
+     * Inicializa el esquema, recupera los registros y precarga los ejemplos
+     * cuando la consola crea el archivo de una base vacía. Un fallo de
      * persistencia al arrancar termina la sesión. En el menú, el mismo tipo de
      * fallo interrumpe la opción elegida y permite volver a elegir.
      *
@@ -24,16 +24,15 @@ public class GestionBiblioteca {
         Biblioteca unaBiblioteca = new Biblioteca("Biblioteca Central");
         
         try {
+            boolean baseNueva = !ConexionBD.existeBaseDeDatos();
             // Inicializa las tablas SQLite desde schema.sql si no existen.
             ConexionBD.inicializarTablas();
             
-            // Si la base de datos esta vacia (primera ejecucion), precarga los datos y los guarda.
-            if (unaBiblioteca.baseDeDatosVacia()) {
+            unaBiblioteca.cargarDesdeBaseDeDatos();
+            if (baseNueva && unaBiblioteca.getLibros().isEmpty() && unaBiblioteca.getSocios().isEmpty()) {
                 precargarDatos(unaBiblioteca);
                 System.out.println("Base de datos creada y precargada con datos de ejemplo.");
             } else {
-                //En ejecuciones siguientes, recupera todo desde SQLite
-                unaBiblioteca.cargarDesdeBaseDeDatos();
                 System.out.println("Datos cargados exitosamente desde la base de datos sqLite.");
             }
         } catch (IllegalStateException e) {
@@ -83,6 +82,8 @@ public class GestionBiblioteca {
         System.out.println("12. Listar préstamos vencidos");
         System.out.println("13. Listar docentes responsables");
         System.out.println("14. Premiar a un docente responsable");
+        System.out.println("15. Quitar un ejemplar");
+        System.out.println("16. Quitar un socio");
         System.out.println(" 0. Salir");
         System.out.println("==============================================");
     }
@@ -140,10 +141,16 @@ public class GestionBiblioteca {
             case 14:
                 premiarDocente(p_biblioteca, p_teclado);
                 break;
+            case 15:
+                quitarLibro(p_biblioteca, p_teclado);
+                break;
+            case 16:
+                quitarSocio(p_biblioteca, p_teclado);
+                break;
             case 0:
                 break;
             default:
-                System.out.println("Opción no válida. Seleccione un número entre 0 y 14.");
+                System.out.println("Opción no válida. Seleccione un número entre 0 y 16.");
                 break;
         }
     }
@@ -375,6 +382,81 @@ public class GestionBiblioteca {
         
         System.out.println("Nuevo plazo de préstamo de " + unDocente.getNombre()
                 + ": " + unDocente.getDiasPrestamo() + " días.");
+    }
+
+    /**
+     * Lista los ejemplares por ID y solicita confirmación para quitar uno.
+     *
+     * @param p_biblioteca Biblioteca que administra los ejemplares.
+     * @param p_teclado Entrada de consola.
+     * @throws IllegalStateException Si el ejemplar tiene historial o falla la baja.
+     */
+    private static void quitarLibro(Biblioteca p_biblioteca, Scanner p_teclado) {
+        if (p_biblioteca.getLibros().isEmpty()) {
+            System.out.println("No hay ejemplares registrados.");
+            return;
+        }
+
+        System.out.println("Ejemplares registrados:");
+        for (Libro unLibro : p_biblioteca.getLibros()) {
+            System.out.println("#" + unLibro.getId() + " | " + unLibro.getTitulo()
+                    + " | Edición " + unLibro.getEdicion());
+        }
+
+        System.out.print("ID del ejemplar: ");
+        int id = p_teclado.nextInt();
+        p_teclado.nextLine();
+
+        Libro unLibro = p_biblioteca.buscarLibro(id);
+        if (unLibro == null) {
+            System.out.println("No se encontró un ejemplar con ese ID.");
+            return;
+        }
+
+        if (confirmarBaja(p_teclado, "el ejemplar #" + id + " «" + unLibro.getTitulo() + "»")
+                && p_biblioteca.quitarLibro(id)) {
+            System.out.println("Ejemplar quitado correctamente.");
+        }
+    }
+
+    /**
+     * Busca un socio por DNI y solicita confirmación para quitarlo.
+     *
+     * @param p_biblioteca Biblioteca que administra los socios.
+     * @param p_teclado Entrada de consola.
+     * @throws IllegalStateException Si el socio tiene historial o falla la baja.
+     */
+    private static void quitarSocio(Biblioteca p_biblioteca, Scanner p_teclado) {
+        System.out.print("DNI del socio: ");
+        int dni = p_teclado.nextInt();
+        p_teclado.nextLine();
+
+        Socio unSocio = p_biblioteca.buscarSocio(dni);
+        if (unSocio == null) {
+            System.out.println("No se encontró un socio con ese DNI.");
+            return;
+        }
+
+        if (confirmarBaja(p_teclado, "al socio «" + unSocio.getNombre() + "» (DNI " + dni + ")")
+                && p_biblioteca.quitarSocio(dni)) {
+            System.out.println("Socio quitado correctamente.");
+        }
+    }
+
+    /**
+     * Solicita una confirmación explícita antes de quitar un registro.
+     *
+     * @param p_teclado Entrada de consola.
+     * @param p_registro Descripción del ejemplar o socio que se quiere quitar.
+     * @return {@code true} si se confirma la baja con S.
+     */
+    private static boolean confirmarBaja(Scanner p_teclado, String p_registro) {
+        System.out.print("¿Quitar " + p_registro + "? (S/N): ");
+        boolean confirmada = p_teclado.nextLine().trim().equalsIgnoreCase("s");
+        if (!confirmada) {
+            System.out.println("Baja cancelada.");
+        }
+        return confirmada;
     }
 
     private static Socio pedirSocio(Biblioteca p_biblioteca, Scanner p_teclado) {

@@ -18,17 +18,18 @@ En la versión original, cada sesión comenzaba con `precargarDatos(unaBibliotec
 
 ### 1. Arranque con Persistencia Condicional en `main`
 
-El arranque inicializa el esquema de SQLite y consulta si la tabla `libros` está vacía. En ese caso, `precargarDatos(...)` registra los ejemplos a través de `Biblioteca`. Si hay ejemplares, `cargarDesdeBaseDeDatos()` recupera los datos que dejó la sesión anterior.
+El arranque comprueba si el archivo SQLite existía, inicializa el esquema y carga los registros. `precargarDatos(...)` se ejecuta únicamente cuando faltaba el archivo al iniciar y las colecciones de ejemplares y socios están vacías. Así una base existente que se vació mediante las bajas permanece vacía al reabrirla.
 
 ```java
 try {
+    boolean baseNueva = !ConexionBD.existeBaseDeDatos();
     ConexionBD.inicializarTablas();
+    unaBiblioteca.cargarDesdeBaseDeDatos();
 
-    if (unaBiblioteca.baseDeDatosVacia()) {
+    if (baseNueva && unaBiblioteca.getLibros().isEmpty() && unaBiblioteca.getSocios().isEmpty()) {
         precargarDatos(unaBiblioteca);
         System.out.println("Base de datos creada y precargada con datos de ejemplo.");
     } else {
-        unaBiblioteca.cargarDesdeBaseDeDatos();
         System.out.println("Datos cargados exitosamente desde la base de datos sqLite.");
     }
 } catch (IllegalStateException e) {
@@ -49,11 +50,15 @@ p_biblioteca.actualizarDiasDocente(unDocente, dias);
 
 `Biblioteca` guarda el plazo resultante en `socios` y después aplica el aumento al objeto. La consola muestra el nuevo plazo cuando la operación termina correctamente.
 
+### 3. Bajas de ejemplares y socios
+
+La opción **15** pide el ID del ejemplar en SQLite. La opción **16** pide el DNI del socio. Ambas muestran el registro encontrado y piden confirmar con `S` o `N`. Con la confirmación, llaman a `Biblioteca.quitarLibro(...)` o `Biblioteca.quitarSocio(...)`. El menú informa si el registro no existe o si la baja es rechazada por historial de préstamos o un error de persistencia.
+
 ---
 
 ## 3. Justificación y Conceptos de POO Aplicados
 
-- **Ciclo de vida persistente.** Una instalación con la tabla `libros` vacía dispone de ejemplos para probar el sistema. En una sesión posterior con ejemplares guardados, el menú vuelve a operar sobre los objetos recuperados de SQLite.
+- **Ciclo de vida persistente.** Una instalación nueva iniciada desde la consola dispone de ejemplos para probar el sistema. Las sesiones posteriores operan sobre los objetos recuperados de SQLite.
 - **Comunicación con el usuario.** Los manejadores informan qué ocurrió al iniciar o al ejecutar una opción. Las confirmaciones de las operaciones aparecen después de completar la llamada a `Biblioteca`.
 - **Separación de responsabilidades.** `GestionBiblioteca` coordina la entrada y la salida de consola y solicita el arranque a `ConexionBD`. `Biblioteca` coordina las operaciones y el repositorio se ocupa del SQL.
 

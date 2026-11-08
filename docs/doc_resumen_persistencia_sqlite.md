@@ -9,9 +9,10 @@ En el diseño original del TP7, los ejemplares, socios y préstamos existían en
 | Componente | Responsabilidad |
 | --- | --- |
 | `GestionBiblioteca` | Arranca la aplicación y presenta el menú de consola. |
-| `Biblioteca` y clases del modelo | Mantienen las colecciones de objetos y aplican las reglas de préstamos y devoluciones. |
+| `Interfaz` | Arranca la aplicación y presenta el menú gráfico. |
+| `Biblioteca` y clases del modelo | Mantienen las colecciones de objetos y aplican las reglas de préstamos, devoluciones y bajas. |
 | [`ConexionBD`](../biblioteca/persistencia/ConexionBD.java) | Abre conexiones con SQLite y lee el esquema con `FileReader` y `BufferedReader`. |
-| [`RepositorioBiblioteca`](../biblioteca/persistencia/RepositorioBiblioteca.java) | Ejecuta consultas, inserciones y actualizaciones. Al cargar, convierte filas en objetos del modelo. |
+| [`RepositorioBiblioteca`](../biblioteca/persistencia/RepositorioBiblioteca.java) | Ejecuta consultas, inserciones, actualizaciones y eliminaciones. Al cargar, convierte filas en objetos del modelo. |
 | [`schema.sql`](../biblioteca/persistencia/schema.sql) | Define las tablas `libros`, `socios` y `prestamos`, sus claves y el índice de préstamos activos. |
 | `sqlite-jdbc-3.54.1.0.jar` | Contiene el driver que implementa JDBC para SQLite. Debe estar en el classpath al ejecutar. |
 
@@ -51,16 +52,18 @@ En una lectura, el flujo es **abrir la conexión → ejecutar la consulta → re
 
 El esquema declara claves foráneas con `ON DELETE RESTRICT`. `ConexionBD.obtenerConexion()` ejecuta `PRAGMA foreign_keys = ON` en cada conexión para que SQLite las compruebe. [Documentación de SQLite](https://www.sqlite.org/foreignkeys.html#fk_enable)
 
+Las bajas se permiten solo para ejemplares y socios sin historial. `Biblioteca` comprueba el historial del objeto y llama al repositorio. El repositorio ejecuta el `DELETE` por ID o DNI. SQLite también protege los registros vinculados a un préstamo, y la colección en memoria se actualiza después de confirmar la escritura.
+
 El índice único `ux_prestamo_activo_por_libro` incluye las filas con `fecha_devolucion IS NULL`. Esto permite conservar el historial de un ejemplar y limita a uno sus préstamos activos. Si una base existente tiene duplicados activos, la creación del índice falla y el programa interrumpe el arranque. [Índices parciales de SQLite](https://sqlite.org/partialindex.html#unique_partial_indexes)
 
 El código guarda las fechas como texto con barras y sin rellenar mes ni día con ceros, por ejemplo `2026/11/6` o `2026/3/5`. La escritura usa `Prestamo.armarFecha()` y la lectura separa los valores por `/` y crea un `GregorianCalendar` a medianoche. `NULL` en `fecha_devolucion` indica que el ejemplar sigue prestado.
 
 ## 5. Cuándo se leen y se escriben los datos
 
-1. Al arrancar, `GestionBiblioteca` llama a `ConexionBD.inicializarTablas()`. El lector conserva el salto al final de cada línea para que los comentarios SQL `--` terminen donde corresponde. El inicializador ejecuta las sentencias del esquema a medida que encuentra el punto y coma.
-2. Si el conteo de filas de la tabla `libros` da cero, se ejecuta `precargarDatos()`. Cada alta se confirma por separado. Si la precarga se interrumpe, los registros guardados hasta ese momento permanecen en SQLite.
-3. Cuando existen ejemplares, el repositorio lee primero libros, después socios y finalmente préstamos. Cada préstamo recuperado se agrega al ejemplar y al socio mediante la misma instancia de `Prestamo`.
-4. Durante el uso del menú, `Biblioteca` evalúa las reglas con los objetos en memoria y delega la escritura al repositorio. Tras el guardado, incorpora el nuevo objeto o actualiza el existente. Si la escritura es rechazada, la excepción interrumpe el método antes del cambio en memoria.
+1. Al arrancar, ambos menús llaman a `ConexionBD.inicializarTablas()`. El lector conserva el salto al final de cada línea para que los comentarios SQL `--` terminen donde corresponde. El inicializador ejecuta las sentencias del esquema a medida que encuentra el punto y coma.
+2. El repositorio lee primero libros, después socios y finalmente préstamos. Cada préstamo recuperado se agrega al ejemplar y al socio mediante la misma instancia de `Prestamo`.
+3. La consola ejecuta `precargarDatos()` únicamente si el archivo SQLite faltaba al iniciar y las dos colecciones están vacías. Cada alta se confirma por separado. Si la precarga se interrumpe, los registros guardados hasta ese momento permanecen en SQLite. La interfaz gráfica permite comenzar con una base nueva vacía.
+4. Durante el uso del menú, `Biblioteca` evalúa las reglas con los objetos en memoria y delega la escritura al repositorio. Tras el guardado, agrega, actualiza o retira el objeto de la colección según la operación. Si la escritura es rechazada, la excepción interrumpe el método antes del cambio en memoria.
 
 El flujo está pensado para una sesión. La devolución identifica el préstamo activo por el ID del ejemplar. El índice protege contra dos préstamos activos, pero una sesión con datos anteriores puede referirse a un préstamo distinto del que SQLite considera activo.
 

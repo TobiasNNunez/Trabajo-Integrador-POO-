@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="biblioteca.Interfaz">
+  <grid id="27dc6" binding="panelPrincipal" layout-manager="BorderLayout" hgap="0" vgap="12">
+    <constraints>
+      <xy x="20" y="20" width="900" height="520"/>
+    </constraints>
+    <properties>
+      <background color="-722949"/>
+    </properties>
+    <border type="empty">
+      <size top="16" left="20" bottom="12" right="20"/>
+    </border>
+    <children>
+      <component id="30427" class="javax.swing.JLabel" binding="titulo">
+        <constraints border-constraint="North"/>
+        <properties>
+          <text value="Gestión de Biblioteca"/>
+          <font style="1" size="26"/>
+          <foreground color="-15321004"/>
+        </properties>
+      </component>
+      <tabbedpane id="1bf59" binding="tabbedPane1" default-binding="true">
+        <constraints border-constraint="Center"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <grid id="a79b8" binding="pestañaLibros" layout-manager="BorderLayout" hgap="0" vgap="6">
+            <constraints>
+              <tabbedpane title="Libros"/>
+            </constraints>
+            <properties>
+              <background color="-1"/>
+            </properties>
+            <border type="empty">
+              <size top="10" left="10" bottom="6" right="10"/>
+            </border>
+            <children>
+              <scrollpane id="f0c9c">
+                <constraints border-constraint="Center"/>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="95c4b" class="javax.swing.JTable" binding="tablaLibros">
+                    <constraints/>
+                    <properties>
+                      <background color="-1"/>
+                      <foreground color="-15258302"/>
+                      <gridColor color="-1840399"/>
+                      <selectionBackground color="-2298886"/>
+                      <selectionForeground color="-15258302"/>
+                      <fillsViewportHeight value="true"/>
+                      <rowHeight value="25"/>
+                      <intercellSpacing width="8" height="1"/>
+                      <showHorizontalLines value="true"/>
+                      <showVerticalLines value="false"/>
+                    </properties>
+                  </component>
+                </children>
+              </scrollpane>
+              <grid id="c43a6" layout-manager="FlowLayout" hgap="8" vgap="5" flow-align="2">
+                <constraints border-constraint="South"/>
+                <properties>
+                  <background color="-1"/>
+                </properties>
+                <border type="none"/>
+                <children>
+                  <component id="f5b01" class="javax.swing.JButton" binding="botonRegistrarEjemplar">
+                    <constraints/>
+                    <properties>
+                      <text value="Registrar ejemplar"/>
+                      <toolTipText value="Agregar un ejemplar al catálogo"/>
+                      <font style="1"/>
+                    </properties>
+                  </component>
+                  <component id="f5b0d" class="javax.swing.JButton" binding="botonQuitarEjemplar">
+                    <constraints/>
+                    <properties>
+                      <text value="Quitar ejemplar"/>
+                      <toolTipText value="Quitar del catálogo el ejemplar seleccionado"/>
+                    </properties>
+                  </component>
+                  <component id="f5b04" class="javax.swing.JButton" binding="botonTitulos">
+                    <constraints/>
+                    <properties>
+                      <text value="Títulos únicos"/>
+                      <toolTipText value="Ver los títulos del catálogo sin repetir"/>
+                    </properties>
+                  </component>
+                  <component id="f5b05" class="javax.swing.JButton" binding="botonTitular">
+                    <constraints/>
+                    <properties>
+                      <text value="Consultar titular"/>
+                      <toolTipText value="Ver quién tiene prestado el ejemplar seleccionado"/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+            </children>
+          </grid>
+          <grid id="25992" binding="pestañaSocios" layout-manager="BorderLayout" hgap="0" vgap="6">
+            <constraints>
+              <tabbedpane title="Socios"/>
+            </constraints>
+            <properties>
+              <background color="-1"/>
+            </properties>
+            <border type="empty">
+              <size top="10" left="10" bottom="6" right="10"/>
+            </border>
+            <children>
+              <scrollpane id="6d52">
+                <constraints border-constraint="Center"/>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="14e8a" class="javax.swing.JTable" binding="tablaSocios">
+                    <constraints/>
+                    <properties>
+                      <background color="-1"/>
+                      <foreground color="-15258302"/>
+                      <gridColor color="-1840399"/>
+                      <selectionBackground color="-2298886"/>
+                      <selectionForeground color="-15258302"/>
+                      <fillsViewportHeight value="true"/>
+                      <rowHeight value="25"/>
+                      <intercellSpacing width="8" height="1"/>
+                      <showHorizontalLines value="true"/>
+                      <showVerticalLines value="false"/>
+                    </properties>
+                  </component>
+                </children>
+              </scrollpane>
+              <grid id="49fe" layout-manager="FlowLayout" hgap="8" vgap="5" flow-align="2">
+                <constraints border-constraint="South"/>
+                <properties>
+                  <background color="-1"/>
+                </properties>
+                <border type="none"/>
+                <children>
+                  <component id="f5b02" class="javax.swing.JButton" binding="botonRegistrarSocio">
+                    <constraints/>
+                    <properties>
+                      <text value="Registrar socio"/>
+                      <toolTipText value="Inscribir a un estudiante o docente"/>
+                      <font style="1"/>
+                    </properties>
+                  </component>
+                  <component id="f5b0e" class="javax.swing.JButton" binding="botonQuitarSocio">
+                    <constraints/>
+                    <properties>
+                      <text value="Quitar socio"/>
+                      <toolTipText value="Quitar del padrón el socio seleccionado"/>
+                    </properties>
+                  </component>
+                  <component id="f5b06" class="javax.swing.JButton" binding="botonBuscarSocio">
+                    <constraints/>
+                    <properties>
+                      <text value="Buscar DNI"/>
+                      <toolTipText value="Encontrar un socio por su DNI"/>
+                    </properties>
+                  </component>
+                  <component id="f5b07" class="javax.swing.JButton" binding="botonCantidadSocios">
+                    <constraints/>
+                    <properties>
+                      <text value="Cantidades"/>
+                      <toolTipText value="Consultar la cantidad de estudiantes y docentes"/>
+                    </properties>
+                  </component>
+                  <component id="f5b08" class="javax.swing.JButton" binding="botonDocentesResponsables">
+                    <constraints/>
+                    <properties>
+                      <text value="Responsables"/>
+                      <toolTipText value="Consultar docentes responsables según su historial de préstamos"/>
+                    </properties>
+                  </component>
+                  <component id="f5b09" class="javax.swing.JButton" binding="botonPremiarDocente">
+                    <constraints/>
+                    <properties>
+                      <text value="Premiar"/>
+                      <toolTipText value="Aumentar el plazo de préstamo del docente seleccionado"/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+            </children>
+          </grid>
+          <grid id="6309d" binding="pestañaPrestamos" layout-manager="BorderLayout" hgap="0" vgap="6">
+            <constraints>
+              <tabbedpane title="Préstamos"/>
+            </constraints>
+            <properties>
+              <background color="-1"/>
+            </properties>
+            <border type="empty">
+              <size top="10" left="10" bottom="6" right="10"/>
+            </border>
+            <children>
+              <scrollpane id="8998c">
+                <constraints border-constraint="Center"/>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="81eab" class="javax.swing.JTable" binding="tablaPrestamos">
+                    <constraints/>
+                    <properties>
+                      <background color="-1"/>
+                      <foreground color="-15258302"/>
+                      <gridColor color="-1840399"/>
+                      <selectionBackground color="-2298886"/>
+                      <selectionForeground color="-15258302"/>
+                      <fillsViewportHeight value="true"/>
+                      <rowHeight value="25"/>
+                      <intercellSpacing width="8" height="1"/>
+                      <showHorizontalLines value="true"/>
+                      <showVerticalLines value="false"/>
+                    </properties>
+                  </component>
+                </children>
+              </scrollpane>
+              <grid id="d6534" layout-manager="FlowLayout" hgap="8" vgap="5" flow-align="2">
+                <constraints border-constraint="South"/>
+                <properties>
+                  <background color="-1"/>
+                </properties>
+                <border type="none"/>
+                <children>
+                  <component id="f5b0a" class="javax.swing.JCheckBox" binding="soloVencidos">
+                    <constraints/>
+                    <properties>
+                      <text value="Solo vencidos"/>
+                      <toolTipText value="Mostrar solo los préstamos activos fuera de plazo"/>
+                      <background color="-1"/>
+                      <foreground color="-15258302"/>
+                    </properties>
+                  </component>
+                  <component id="f5b03" class="javax.swing.JButton" binding="botonPrestar">
+                    <constraints/>
+                    <properties>
+                      <text value="Prestar"/>
+                      <toolTipText value="Registrar un nuevo préstamo"/>
+                      <font style="1"/>
+                    </properties>
+                  </component>
+                  <component id="f5b0b" class="javax.swing.JButton" binding="botonDevolver">
+                    <constraints/>
+                    <properties>
+                      <text value="Devolver"/>
+                      <toolTipText value="Registrar la devolución del préstamo seleccionado"/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+            </children>
+          </grid>
+        </children>
+      </tabbedpane>
+      <component id="f5b0c" class="javax.swing.JLabel" binding="etiquetaEstado">
+        <constraints border-constraint="South"/>
+        <properties>
+          <text value="Biblioteca lista"/>
+          <foreground color="-12428430"/>
+        </properties>
+      </component>
+    </children>
+  </grid>
+</form>

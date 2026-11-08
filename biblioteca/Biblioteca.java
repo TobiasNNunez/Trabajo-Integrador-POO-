@@ -150,6 +150,50 @@ public class Biblioteca {
     }
 
     /**
+     * Quita un ejemplar sin historial de préstamos. Primero lo elimina de SQLite
+     * y luego lo retira de la colección en memoria.
+     *
+     * @param p_id Identificador del ejemplar.
+     * @return {@code true} si se quitó el ejemplar, o {@code false} si el ID no está registrado.
+     * @throws IllegalStateException Si el ejemplar tiene historial o falla la baja en SQLite.
+     */
+    public boolean quitarLibro(int p_id) {
+        Libro unLibro = this.buscarLibro(p_id);
+        if (unLibro == null) {
+            return false;
+        }
+        if (!unLibro.getPrestamos().isEmpty()) {
+            throw new IllegalStateException("El ejemplar tiene historial de préstamos y debe conservarse.");
+        }
+
+        this.getRepositorio().eliminarLibro(p_id);
+        this.getLibros().remove(unLibro);
+        return true;
+    }
+
+    /**
+     * Quita un socio sin historial de préstamos. Primero lo elimina de SQLite
+     * y luego lo retira de la colección en memoria.
+     *
+     * @param p_dni DNI del socio.
+     * @return {@code true} si se quitó el socio, o {@code false} si el DNI no está registrado.
+     * @throws IllegalStateException Si el socio tiene historial o falla la baja en SQLite.
+     */
+    public boolean quitarSocio(int p_dni) {
+        Socio unSocio = this.buscarSocio(p_dni);
+        if (unSocio == null) {
+            return false;
+        }
+        if (!unSocio.getPrestamos().isEmpty()) {
+            throw new IllegalStateException("El socio tiene historial de préstamos y debe conservarse.");
+        }
+
+        this.getRepositorio().eliminarSocio(p_dni);
+        this.getSocios().remove(unSocio);
+        return true;
+    }
+
+    /**
      * Comprueba la disponibilidad del ejemplar y si el socio puede pedirlo.
      * Tras guardarlo en SQLite, agrega el mismo préstamo al socio y al ejemplar.
      *

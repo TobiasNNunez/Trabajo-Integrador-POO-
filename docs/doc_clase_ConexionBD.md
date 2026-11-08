@@ -16,12 +16,17 @@ Pertenece al subpaquete `biblioteca.persistencia`, aislando los detalles de infr
 
 ## 2. Atributos de Clase (Constantes)
 
-- **`URL`** contiene `jdbc:sqlite:biblioteca/persistencia/biblioteca.db` e indica al driver qué archivo local debe abrir.
+- **`RUTA_BD`** contiene `biblioteca/persistencia/biblioteca.db` y se usa para comprobar si el archivo existe.
+- **`URL`** combina `jdbc:sqlite:` con `RUTA_BD` e indica al driver qué archivo local debe abrir.
 - **`RUTA_SQL`** contiene `biblioteca/persistencia/schema.sql` y señala el archivo con las sentencias de creación de tablas e índice. Las dos rutas se interpretan desde el directorio de ejecución.
 
 ---
 
 ## 3. Métodos Implementados
+
+### `existeBaseDeDatos()`
+
+Comprueba si el archivo SQLite ya existe antes de abrir una conexión. `GestionBiblioteca` usa este dato al decidir si corresponde precargar los ejemplos en un primer arranque.
 
 ### `obtenerConexion()`
 
