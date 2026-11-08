@@ -2,9 +2,9 @@
 
 ## Gestión de Biblioteca
 
-Proyecto académico para desarrollar en Java una aplicación que permita administrar los libros, los socios y los préstamos de una biblioteca. El trabajo integra los conceptos de programación orientada a objetos abordados en la materia y se desarrolla en equipo utilizando BlueJ, Trello y GitHub.
+Aplicación Java de consola para administrar ejemplares, socios y préstamos de una biblioteca. El modelo usa colecciones genéricas y fechas con `Calendar`. La aplicación incorpora persistencia local con SQLite a través de JDBC.
 
-**Estado inicial:** preparación del repositorio. La implementación de las clases y sus verificaciones se incorporará durante el desarrollo del trabajo.
+> **Estado verificado.** Con Java 21 y el driver incluido, el programa inicializa una base nueva y recupera los datos tras reiniciar. En una copia temporal se verificaron las altas, los préstamos, las devoluciones, el premio docente y la respuesta ante fallos de escritura.
 
 ## Integrantes
 
@@ -12,97 +12,71 @@ Proyecto académico para desarrollar en Java una aplicación que permita adminis
 - Nuñez Axel Gabriel
 - Nuñez Tobias Nahuel
 - Otero Emmanuel David
-- Gaitán Pereyra Julio Emilio
 - Prieto Cesar Gabriel
+- Elias Torres
 
-## Objetivo y alcance
+## Funciones del menú
 
-Implementar el diseño provisto en el enunciado del TP7, respetando su diagrama UML y las reglas de negocio de la biblioteca.
-
-El sistema deberá permitir:
-
-- Registrar libros y socios de tipo estudiante o docente.
-- Gestionar préstamos y devoluciones de ejemplares.
-- Aplicar las condiciones de préstamo correspondientes a cada tipo de socio.
-- Consultar los préstamos actuales que se encuentren vencidos.
-- Identificar al socio que tiene un ejemplar en su poder.
-- Obtener la cantidad de socios de cada tipo.
-- Listar los libros, los socios y los títulos disponibles en el catálogo sin repetir títulos.
-- Identificar a los docentes que siempre cumplieron con los plazos de devolución.
-- Informar mediante una excepción las operaciones previstas sobre libros que no se encuentran prestados.
-
-## Tecnologías y herramientas
-
-| Herramienta | Utilización |
+| Opciones | Operaciones |
 | --- | --- |
-| Java | Implementación de las clases y la lógica de la aplicación. |
-| BlueJ | Desarrollo, compilación y ejecución del proyecto académico. |
-| Trello | Organización de tareas, seguimiento del desarrollo y revisión entre integrantes. |
-| Git | Control de versiones del código y la documentación. |
-| GitHub | Repositorio compartido del equipo. |
+| 1–3 | Registrar un ejemplar, un estudiante o un docente. |
+| 4–7 | Prestar, devolver, consultar quién tiene un ejemplar y buscar un socio por DNI. |
+| 8–11 | Listar ejemplares y socios, contar socios por tipo y listar títulos sin repetir. |
+| 12–14 | Listar préstamos vencidos, listar docentes responsables y sumar días de préstamo a un docente responsable. |
+| 0 | Salir. |
 
-Todas las clases deberán pertenecer al paquete `biblioteca`. Se utilizarán colecciones genéricas y el tipo `Calendar` para las fechas, conforme al diseño solicitado.
+Cada ejemplar se elige por su número en la lista. Dos ejemplares pueden compartir el mismo título y tener historiales diferentes. Los estudiantes tienen un plazo inicial de 20 días y un máximo de tres préstamos activos. Los docentes tienen un plazo inicial de cinco días. Un préstamo activo vencido impide nuevos retiros a cualquier socio.
 
-## Clases previstas
+## Estructura del proyecto
 
-| Clase | Responsabilidad principal |
-| --- | --- |
-| `Socio` | Clase abstracta con los datos y comportamientos comunes de los socios. |
-| `Estudiante` | Especialización de socio con carrera y condiciones particulares de préstamo. |
-| `Docente` | Especialización de socio con área, días de préstamo y evaluación de responsabilidad. |
-| `Libro` | Representación de un ejemplar y del historial de sus préstamos. |
-| `Prestamo` | Relación entre un socio y un libro, con fechas de retiro y devolución. |
-| `Biblioteca` | Administración de socios, libros, préstamos, devoluciones, consultas y listados. |
-| `GestionBiblioteca` | Creación de objetos y demostración del funcionamiento integrado de la aplicación. |
-| `LibroNoPrestadoException` | Excepción para las situaciones indicadas en el enunciado en las que un ejemplar no está prestado. |
+```text
+TP7/
+├── package.bluej                       # Proyecto de BlueJ
+├── README.md
+├── biblioteca/
+│   ├── GestionBiblioteca.java          # Menú y datos de ejemplo
+│   ├── Biblioteca.java                 # Operaciones y consultas del dominio
+│   ├── Libro.java                      # Ejemplar e historial de préstamos
+│   ├── Prestamo.java                   # Socio, ejemplar y fechas
+│   ├── Socio.java                      # Clase abstracta
+│   ├── Estudiante.java
+│   ├── Docente.java
+│   ├── LibroNoPrestadoException.java
+│   └── persistencia/
+│       ├── ConexionBD.java             # Conexión SQLite e inicialización
+│       ├── RepositorioBiblioteca.java  # Consultas, escrituras y carga de objetos
+│       ├── schema.sql
+│       └── sqlite-jdbc-3.54.1.0.jar
+└── docs/                              # Documentación por clase y resumen persistencia
+```
 
-Los constructores y métodos auxiliares necesarios se coordinarán entre los responsables para mantener compatibles las clases de los distintos subgrupos.
+Los archivos `package.bluej` de los paquetes y los `.ctxt` guardan información del entorno BlueJ. Las clases del modelo y el menú pertenecen a `biblioteca`. Las clases de acceso a datos están en el subpaquete `biblioteca.persistencia`.
+
+## Ejecución en BlueJ
+
+1. Abrí la carpeta `TP7`, que contiene el archivo `package.bluej`.
+2. Configurá el driver `biblioteca/persistencia/sqlite-jdbc-3.54.1.0.jar` en **Preferencias → Librerías** y reiniciá BlueJ. También podés colocar una copia del JAR en una carpeta `+libs` en la raíz de `TP7` antes de abrir el proyecto. [FAQ de BlueJ](https://bluej.org/faq.html)
+3. Entrá al paquete `biblioteca`, compilá el proyecto y ejecutá `main(String[] args)` desde el menú contextual de `GestionBiblioteca`.
+4. Usá el menú de la terminal de BlueJ. La opción `0` termina la sesión.
+
+## Persistencia
+
+La aplicación usa `biblioteca/persistencia/biblioteca.db` y `biblioteca/persistencia/schema.sql`, con rutas relativas a la carpeta de ejecución. SQLite guarda los ejemplares, los socios y el historial de préstamos. Un préstamo activo tiene `fecha_devolucion` en `NULL`.
+
+Al iniciar, el programa aplica el [esquema SQL](biblioteca/persistencia/schema.sql) y consulta si la tabla `libros` está vacía. En una base nueva guarda cuatro ejemplares, cuatro socios y dos préstamos de ejemplo. Si ya hay ejemplares, reconstruye las colecciones en memoria a partir de las tres tablas. El esquema impide más de un préstamo activo por ejemplar y la conexión habilita las claves foráneas.
+
+Las operaciones de escritura guardan primero en SQLite y después actualizan los objetos en memoria. Un fallo de inicialización o carga impide abrir el menú. Durante el uso, un fallo de escritura cancela esa opción y el menú permite seguir trabajando. El flujo está pensado para una sola sesión del programa.
+
+[Resumen de persistencia y conceptos JDBC](docs/doc_resumen_persistencia_sqlite.md)
 
 ## Organización del equipo
 
-La distribución de trabajo indicada por la consigna es la siguiente:
+| Subgrupo | Clases asignadas |
+| --- | --- |
+| 1 | `Prestamo` y `Socio` |
+| 2 | `Estudiante` y `Docente` |
+| 3 | `Libro` |
+| 4 | `Biblioteca` |
+| Equipo completo | `GestionBiblioteca` e integración |
 
-| Subgrupo | Integrantes | Clases asignadas |
-| --- | --- | --- |
-| 1 | 1 | `Prestamo` y `Socio`. |
-| 2 | 1 | `Estudiante` y `Docente`. |
-| 3 | 1 | `Libro`. |
-| 4 | 3 | `Biblioteca`. |
-| Equipo completo | 6 | `GestionBiblioteca` e integración del trabajo. |
-
-La implementación de `LibroNoPrestadoException` se coordinará con los responsables de `Biblioteca`.
-
-## Seguimiento en Trello
-
-El tablero del equipo se organiza en cuatro listas:
-
-1. **Lista de tareas:** clases y actividades pendientes, con responsables y checklist de métodos.
-2. **En proceso:** tareas en desarrollo, con documentación de las decisiones tomadas y de los conceptos utilizados.
-3. **Auditoría:** tareas desarrolladas que otro integrante revisa para registrar observaciones y posibles correcciones.
-4. **Hecho:** tareas revisadas y dadas por terminadas.
-
-Cada tarjeta permite registrar el alcance de la tarea, sus avances y la explicación de cómo se implementaron sus métodos y por qué se eligió esa solución. Las correcciones se documentarán para conservar el seguimiento de las revisiones.
-
-## Apertura y ejecución en BlueJ
-
-Estas instrucciones se aplicarán cuando los archivos del proyecto estén incorporados al repositorio:
-
-1. Tener instalado BlueJ con un JDK compatible.
-2. Abrir desde BlueJ la carpeta del proyecto que contenga el archivo `package.bluej`.
-3. Compilar las clases y resolver los errores que se detecten.
-4. Ejecutar el punto de entrada definido en `GestionBiblioteca` para comprobar los escenarios y listados del trabajo.
-
-En el estado inicial del repositorio todavía no se incluye una aplicación ejecutable.
-
-## Verificación prevista
-
-Durante el desarrollo se comprobarán:
-
-- La compilación del proyecto completo en BlueJ.
-- La correspondencia entre las clases y el diseño UML.
-- La coherencia de los registros de préstamos y devoluciones.
-- Los casos normales y los límites de las reglas de préstamo.
-- El tratamiento de vencimientos y devoluciones realizadas en la fecha límite.
-- Las consultas y los formatos de listados solicitados.
-- El lanzamiento y manejo de `LibroNoPrestadoException`.
-- La revisión de las clases por otros integrantes y la resolución de las observaciones.
+La consigna organiza el seguimiento en Trello mediante cuatro listas. **Lista de tareas** reúne las actividades y responsables. **En proceso** registra el desarrollo. **Auditoría** reúne las observaciones de revisión. **Hecho** registra las tareas revisadas. Git y GitHub se usan para el control de versiones.

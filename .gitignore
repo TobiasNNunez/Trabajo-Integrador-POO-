@@ -4,3 +4,7 @@
 # Archivos temporales de edición
 *.bak
 *~
+
+# Base local de SQLite
+/biblioteca/persistencia/biblioteca.db
+/biblioteca/persistencia/biblioteca.db-*

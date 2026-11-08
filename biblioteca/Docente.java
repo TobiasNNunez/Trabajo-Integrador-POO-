@@ -11,7 +11,20 @@ import java.util.*;
  */
 public class Docente extends Socio {
     private String area;
-
+    
+    /**
+     * Reconstruye un docente con el plazo guardado en SQLite.
+     *
+     * @param p_dniSocio DNI del docente.
+     * @param p_nombre Nombre y apellido del docente.
+     * @param p_area Área en la que se desempeña.
+     * @param p_diasPrestamo Plazo de préstamo guardado, en días.
+     */
+    public Docente(int p_dniSocio, String p_nombre, String p_area, int p_diasPrestamo) {
+        super(p_dniSocio, p_nombre, p_diasPrestamo);
+        this.setArea(p_area);
+    }
+    
     /**
      * Inicializa un docente con sus datos y un plazo de préstamo de 5 días.
      *
@@ -42,6 +55,11 @@ public class Docente extends Socio {
         this.area = p_area;
     }
 
+    /**
+     * Devuelve el área del docente.
+     *
+     * @return Área en la que se desempeña.
+     */
     public String getArea() {
         return this.area;
     }
@@ -75,7 +93,7 @@ public class Docente extends Socio {
     }
 
     /**
-     * Adiciona días al plazo de préstamo que tiene actualmente el docente.
+     * Suma días al plazo del docente en memoria.
      *
      * @param p_dias Cantidad de días que se agregan al plazo actual.
      */

@@ -4,23 +4,42 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
+import biblioteca.persistencia.ConexionBD;
 
 /**
- * Clase ejecutable para gestionar los libros, socios y préstamos de una biblioteca
- * mediante un menú de consola.
+ * Punto de entrada y menú de consola para gestionar la biblioteca.
+ * Coordina el arranque con SQLite y comunica el resultado de cada opción.
  */
 public class GestionBiblioteca {
     /**
-     * Carga datos de ejemplo y presenta el menú de gestión de la biblioteca.
+     * Inicializa el esquema y precarga los ejemplos si la tabla de ejemplares
+     * está vacía. En los demás arranques recupera el catálogo. Un fallo de
+     * persistencia al arrancar termina la sesión. En el menú, el mismo tipo de
+     * fallo interrumpe la opción elegida y permite volver a elegir.
      *
      * @param args Argumentos de la línea de comandos, no utilizados.
      */
     public static void main(String[] args) {
         Scanner teclado = new Scanner(System.in);
         Biblioteca unaBiblioteca = new Biblioteca("Biblioteca Central");
-
-        precargarDatos(unaBiblioteca);
-        System.out.println("Se cargaron los datos de ejemplo.");
+        
+        try {
+            // Inicializa las tablas SQLite desde schema.sql si no existen.
+            ConexionBD.inicializarTablas();
+            
+            // Si la base de datos esta vacia (primera ejecucion), precarga los datos y los guarda.
+            if (unaBiblioteca.baseDeDatosVacia()) {
+                precargarDatos(unaBiblioteca);
+                System.out.println("Base de datos creada y precargada con datos de ejemplo.");
+            } else {
+                //En ejecuciones siguientes, recupera todo desde SQLite
+                unaBiblioteca.cargarDesdeBaseDeDatos();
+                System.out.println("Datos cargados exitosamente desde la base de datos sqLite.");
+            }
+        } catch (IllegalStateException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
 
         int opcion;
         do {
@@ -29,8 +48,12 @@ public class GestionBiblioteca {
             opcion = teclado.nextInt();
             teclado.nextLine();
             System.out.println();
-
-            ejecutarOpcion(unaBiblioteca, teclado, opcion);
+            
+            try {
+                ejecutarOpcion(unaBiblioteca, teclado, opcion);
+            } catch (IllegalStateException e) {
+                System.out.println(e.getMessage());
+            }
         } while (opcion != 0);
 
         System.out.println("Fin de la gestión de la biblioteca.");
@@ -65,12 +88,12 @@ public class GestionBiblioteca {
     }
 
     /**
-     * Ejecuta la operación elegida y utiliza los métodos de la biblioteca
-     * para las altas, los préstamos, las devoluciones y las consultas.
+     * Despacha la opción seleccionada al método correspondiente.
      *
      * @param p_biblioteca Biblioteca que se está administrando.
      * @param p_teclado Entrada de consola.
      * @param p_opcion Opción seleccionada.
+     * @throws IllegalStateException Si la opción requiere una escritura que falla en SQLite.
      */
     private static void ejecutarOpcion(Biblioteca p_biblioteca, Scanner p_teclado, int p_opcion) {
         switch (p_opcion) {
@@ -126,10 +149,11 @@ public class GestionBiblioteca {
     }
 
     /**
-     * Carga socios y ejemplares para demostrar las consultas del integrador.
+     * Registra cuatro socios, cuatro ejemplares y dos préstamos de ejemplo.
      * Incluye dos ejemplares del mismo título y un préstamo vencido.
      *
-     * @param p_biblioteca Biblioteca donde se registran los datos.
+     * @param p_biblioteca Biblioteca donde se guardan los ejemplos.
+     * @throws IllegalStateException Si falla una escritura en SQLite.
      */
     private static void precargarDatos(Biblioteca p_biblioteca) {
         p_biblioteca.nuevoSocioEstudiante(1001, "Ana Torres", "Sistemas");
@@ -153,6 +177,12 @@ public class GestionBiblioteca {
         p_biblioteca.prestarLibro(retiroVencido, docenteConAtraso, libroVencido);
     }
 
+    /**
+     * Lee los datos de un ejemplar y confirma el alta tras el guardado.
+     *
+     * @param p_biblioteca Biblioteca que administra el ejemplar.
+     * @param p_teclado Entrada de consola.
+     */
     private static void registrarLibro(Biblioteca p_biblioteca, Scanner p_teclado) {
         System.out.print("Título: ");
         String titulo = p_teclado.nextLine();
@@ -172,6 +202,13 @@ public class GestionBiblioteca {
         System.out.println("Libro registrado correctamente.");
     }
 
+    /**
+     * Lee los datos del socio, comprueba el DNI y confirma el alta tras el guardado.
+     *
+     * @param p_biblioteca Biblioteca que administra al socio.
+     * @param p_teclado Entrada de consola.
+     * @param p_esDocente {@code true} para registrar un docente, o {@code false} para un estudiante.
+     */
     private static void registrarSocio(Biblioteca p_biblioteca, Scanner p_teclado, boolean p_esDocente) {
         System.out.print("DNI: ");
         int dni = p_teclado.nextInt();
@@ -198,6 +235,13 @@ public class GestionBiblioteca {
         System.out.println("Socio registrado correctamente.");
     }
 
+    /**
+     * Solicita un socio y un ejemplar. Informa el préstamo registrado o el
+     * rechazo por las condiciones del socio o del ejemplar.
+     *
+     * @param p_biblioteca Biblioteca que registra el préstamo.
+     * @param p_teclado Entrada de consola.
+     */
     private static void prestarLibro(Biblioteca p_biblioteca, Scanner p_teclado) {
         Socio unSocio = pedirSocio(p_biblioteca, p_teclado);
         
@@ -220,6 +264,13 @@ public class GestionBiblioteca {
         }
     }
 
+    /**
+     * Solicita un ejemplar y registra su devolución. Si está disponible,
+     * muestra el mensaje de {@link LibroNoPrestadoException}.
+     *
+     * @param p_biblioteca Biblioteca que registra la devolución.
+     * @param p_teclado Entrada de consola.
+     */
     private static void devolverLibro(Biblioteca p_biblioteca, Scanner p_teclado) {
         Libro unLibro = elegirEjemplar(p_biblioteca, p_teclado);
         
@@ -233,6 +284,13 @@ public class GestionBiblioteca {
         }
     }
 
+    /**
+     * Muestra el socio que tiene el ejemplar o el mensaje de
+     * {@link LibroNoPrestadoException} si está disponible.
+     *
+     * @param p_biblioteca Biblioteca que conserva el préstamo.
+     * @param p_teclado Entrada de consola.
+     */
     private static void consultarTitular(Biblioteca p_biblioteca, Scanner p_teclado) {
         Libro unLibro = elegirEjemplar(p_biblioteca, p_teclado);
         
@@ -246,6 +304,12 @@ public class GestionBiblioteca {
         }
     }
 
+    /**
+     * Muestra los datos y el plazo de un socio encontrado por DNI.
+     *
+     * @param p_biblioteca Biblioteca donde se busca al socio.
+     * @param p_teclado Entrada de consola.
+     */
     private static void mostrarSocio(Biblioteca p_biblioteca, Scanner p_teclado) {
         Socio unSocio = pedirSocio(p_biblioteca, p_teclado);
         
@@ -255,6 +319,11 @@ public class GestionBiblioteca {
         }
     }
 
+    /**
+     * Lista los préstamos activos cuyo plazo ha vencido.
+     *
+     * @param p_biblioteca Biblioteca que proporciona los préstamos vencidos.
+     */
     private static void mostrarVencidos(Biblioteca p_biblioteca) {
         ArrayList<Prestamo> vencidos = p_biblioteca.prestamosVencidos();
         
@@ -269,9 +338,10 @@ public class GestionBiblioteca {
     }
 
     /**
-     * Agrega días de préstamo a un docente que cumple la condición de responsabilidad.
+     * Solicita un aumento de plazo para un docente responsable. Delega el
+     * guardado y muestra el nuevo plazo después de aplicar el cambio.
      *
-     * @param p_biblioteca Biblioteca que contiene al socio.
+     * @param p_biblioteca Biblioteca que administra al docente.
      * @param p_teclado Entrada de consola.
      */
     private static void premiarDocente(Biblioteca p_biblioteca, Scanner p_teclado) {
@@ -301,7 +371,8 @@ public class GestionBiblioteca {
             return;
         }
 
-        unDocente.cambiarDiasDePrestamo(dias);
+        p_biblioteca.actualizarDiasDocente(unDocente, dias);
+        
         System.out.println("Nuevo plazo de préstamo de " + unDocente.getNombre()
                 + ": " + unDocente.getDiasPrestamo() + " días.");
     }

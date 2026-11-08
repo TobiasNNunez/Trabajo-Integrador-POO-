@@ -1,7 +1,8 @@
 package biblioteca;
 
 /**
- * Indica que se intentó devolver o consultar el préstamo de un ejemplar disponible.
+ * Excepción verificada del dominio. Indica que se intentó devolver un
+ * ejemplar disponible o consultar quién lo tiene prestado.
  */
 public class LibroNoPrestadoException extends Exception {
     /**

@@ -1,27 +1,39 @@
 #BlueJ class context
-#Thu Nov 05 20:46:45 ART 2026
+#Sat Nov 07 22:35:16 ART 2026
 comment0.target=Socio
-comment0.text=\r\n @author Tobias Nu\u00F1ez\r\n
+comment0.text=\r\n Representa a un socio con su DNI, su plazo y su historial de pr\u00E9stamos.\r\n Las subclases aportan el tipo de socio y sus condiciones particulares.\r\n\r\n @author Tobias Nu\u00F1ez\r\n
 comment1.params=p_dniSocio p_nombre p_diasPrestamo
 comment1.target=Socio(int, java.lang.String, int)
+comment1.text=\r\n Inicializa un socio con un historial vac\u00EDo.\r\n\r\n @param p_dniSocio DNI del socio.\r\n @param p_nombre Nombre y apellido del socio.\r\n @param p_diasPrestamo Plazo de pr\u00E9stamo en d\u00EDas.\r\n
 comment10.target=java.util.ArrayList getPrestamos()
+comment10.text=\r\n Devuelve la colecci\u00F3n de pr\u00E9stamos activos y devueltos.\r\n\r\n @return Historial de pr\u00E9stamos del socio.\r\n
 comment11.params=p_prestamo
 comment11.target=void agregarPrestamo(Prestamo)
+comment11.text=\r\n Agrega un pr\u00E9stamo al historial del socio.\r\n\r\n @param p_prestamo Pr\u00E9stamo que se incorpora.\r\n
 comment12.target=int cantLibrosPrestados()
+comment12.text=\r\n Cuenta los pr\u00E9stamos cuya fecha de devoluci\u00F3n sigue pendiente.\r\n\r\n @return Cantidad de ejemplares que est\u00E1n en poder del socio.\r\n
 comment13.target=boolean puedePedir()
+comment13.text=\r\n Eval\u00FAa la regla com\u00FAn de pr\u00E9stamo para todos los socios.\r\n\r\n @return {@code true} si el socio carece de pr\u00E9stamos activos vencidos.\r\n
 comment14.target=java.lang.String soyDeLaClase()
+comment14.text=\r\n Identifica el tipo concreto de socio en los listados y en el repositorio.\r\n\r\n @return Nombre del tipo de socio.\r\n
 comment15.target=java.lang.String toString()
+comment15.text=\r\n Describe al socio para los listados.\r\n\r\n @return Texto con el DNI, el nombre, el tipo y la cantidad de pr\u00E9stamos activos.\r\n
 comment2.params=p_dniSocio p_nombre p_diasPrestamo p_prestamos
 comment2.target=Socio(int, java.lang.String, int, java.util.ArrayList)
+comment2.text=\r\n Inicializa un socio con un historial ya disponible.\r\n\r\n @param p_dniSocio DNI del socio.\r\n @param p_nombre Nombre y apellido del socio.\r\n @param p_diasPrestamo Plazo de pr\u00E9stamo en d\u00EDas.\r\n @param p_prestamos Colecci\u00F3n que se incorpora como historial.\r\n
 comment3.params=p_dniSocio
 comment3.target=void setDniSocio(int)
 comment4.params=p_nombre
 comment4.target=void setNombre(java.lang.String)
 comment5.params=p_diasPrestamo
 comment5.target=void setDiasPrestamo(int)
+comment5.text=\r\n Asigna el plazo de pr\u00E9stamo del socio.\r\n\r\n @param p_diasPrestamo Plazo en d\u00EDas.\r\n
 comment6.params=p_prestamos
 comment6.target=void setPrestamos(java.util.ArrayList)
 comment7.target=int getDniSocio()
+comment7.text=\r\n Devuelve el DNI del socio.\r\n\r\n @return DNI del socio.\r\n
 comment8.target=java.lang.String getNombre()
+comment8.text=\r\n Devuelve el nombre del socio.\r\n\r\n @return Nombre y apellido del socio.\r\n
 comment9.target=int getDiasPrestamo()
+comment9.text=\r\n Devuelve el plazo vigente.\r\n\r\n @return Cantidad de d\u00EDas de pr\u00E9stamo.\r\n
 numComments=16

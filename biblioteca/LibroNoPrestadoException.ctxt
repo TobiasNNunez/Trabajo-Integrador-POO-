@@ -1,7 +1,7 @@
 #BlueJ class context
-#Wed Nov 04 23:30:08 ART 2026
+#Sat Nov 07 22:35:16 ART 2026
 comment0.target=LibroNoPrestadoException
-comment0.text=\r\n Indica que se intent\u00F3 devolver o consultar el pr\u00E9stamo de un ejemplar disponible.\r\n
+comment0.text=\r\n Excepci\u00F3n verificada del dominio. Indica que se intent\u00F3 devolver un\r\n ejemplar disponible o consultar qui\u00E9n lo tiene prestado.\r\n
 comment1.params=p_mensaje
 comment1.target=LibroNoPrestadoException(java.lang.String)
 comment1.text=\r\n Inicializa la excepci\u00F3n con el mensaje de la operaci\u00F3n.\r\n\r\n @param p_mensaje Mensaje que describe por qu\u00E9 no se puede realizar la operaci\u00F3n.\r\n

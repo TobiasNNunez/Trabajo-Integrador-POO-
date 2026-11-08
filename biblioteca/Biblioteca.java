@@ -3,17 +3,21 @@ package biblioteca;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import biblioteca.persistencia.RepositorioBiblioteca;
 
 /**
- * Administra los socios, los ejemplares y los préstamos de una biblioteca.
+ * Administra socios, ejemplares y préstamos. Aplica las reglas sobre las
+ * colecciones en memoria y delega las escrituras en {@link RepositorioBiblioteca}.
+ * Las operaciones de guardado actualizan los objetos después de escribir en SQLite.
  */
 public class Biblioteca {
     private String nombre;
     private ArrayList<Socio> socios; // Multiplicidad 0..*
     private ArrayList<Libro> libros; // Multiplicidad 0..*
+    private RepositorioBiblioteca repositorio;
 
     /**
-     * Inicializa una biblioteca con sus colecciones de socios y libros vacías.
+     * Inicializa las colecciones vacías y crea el repositorio de persistencia.
      *
      * @param p_nombre Nombre de la biblioteca.
      */
@@ -21,6 +25,7 @@ public class Biblioteca {
         this.setNombre(p_nombre);
         this.setSocios(new ArrayList<Socio>());
         this.setLibros(new ArrayList<Libro>());
+        this.setRepositorio(new RepositorioBiblioteca());
     }
 
     /**
@@ -49,6 +54,15 @@ public class Biblioteca {
     private void setLibros(ArrayList<Libro> p_libros) {
         this.libros = p_libros;
     }
+    
+    /**
+     * Asigna el objeto encargado de la persistencia de datos.
+     * 
+     * @param p_repositorio Instancia de RepositorioBiblioteca.
+     */
+    private void setRepositorio(RepositorioBiblioteca p_repositorio) {
+        this.repositorio = p_repositorio;
+    }
 
     /**
      * Devuelve el nombre de la biblioteca.
@@ -76,73 +90,105 @@ public class Biblioteca {
     public ArrayList<Libro> getLibros() {
         return this.libros;
     }
+    
+    /**
+     * Devuelve el repositorio de persistencia de la biblioteca.
+     * 
+     * @return Objeto RepositorioBiblioteca.
+     */
+    public RepositorioBiblioteca getRepositorio() {
+        return this.repositorio;
+    }
 
     // Métodos para dar de alta libros y socios
     /**
-     * Crea un ejemplar y lo incorpora a la biblioteca.
+     * Guarda un ejemplar en SQLite y lo incorpora a la colección con su identificador.
      *
      * @param p_titulo Título del libro.
      * @param p_edicion Número de edición.
      * @param p_editorial Editorial del libro.
      * @param p_anio Año de publicación.
+     * @throws IllegalStateException Si falla la inserción o la consulta del identificador.
      */
     public void nuevoLibro(String p_titulo, int p_edicion, String p_editorial, int p_anio) {
-        Libro unLibro = new Libro(p_titulo, p_edicion, p_editorial, p_anio);
+        int idGenerado = this.getRepositorio().insertarLibro(p_titulo, p_edicion, p_editorial, p_anio);
+        
+        Libro unLibro = new Libro(idGenerado, p_titulo, p_edicion, p_editorial, p_anio);
         this.getLibros().add(unLibro);
     }
 
     /**
-     * Crea y registra un socio estudiante.
+     * Crea un estudiante y lo incorpora a la colección después de guardarlo.
      *
      * @param p_dniSocio DNI del estudiante.
      * @param p_nombre Nombre y apellido del estudiante.
      * @param p_carrera Carrera que cursa.
+     * @throws IllegalStateException Si falla el guardado en SQLite.
      */
     public void nuevoSocioEstudiante(int p_dniSocio, String p_nombre, String p_carrera) {
         Estudiante unEstudiante = new Estudiante(p_dniSocio, p_nombre, p_carrera);
+        
+        this.getRepositorio().guardarSocio(unEstudiante);
+        
         this.getSocios().add(unEstudiante);
     }
 
     /**
-     * Crea y registra un socio docente.
+     * Crea un docente y lo incorpora a la colección después de guardarlo.
      *
      * @param p_dniSocio DNI del docente.
      * @param p_nombre Nombre y apellido del docente.
      * @param p_area Área en la que se desempeña.
+     * @throws IllegalStateException Si falla el guardado en SQLite.
      */
     public void nuevoSocioDocente(int p_dniSocio, String p_nombre, String p_area) {
         Docente unDocente = new Docente(p_dniSocio, p_nombre, p_area);
+        
+        this.getRepositorio().guardarSocio(unDocente);
+        
         this.getSocios().add(unDocente);
     }
 
     /**
-     * Registra un préstamo en el socio y el libro si el ejemplar está disponible
-     * y el socio puede pedirlo.
+     * Comprueba la disponibilidad del ejemplar y si el socio puede pedirlo.
+     * Tras guardarlo en SQLite, agrega el mismo préstamo al socio y al ejemplar.
      *
-     * @param p_fechaRetiro Fecha de retiro del ejemplar.
+     * @param p_fechaRetiro Fecha de retiro.
      * @param p_socio Socio que solicita el préstamo.
      * @param p_libro Ejemplar solicitado.
-     * @return true si se realizó el préstamo, false en caso contrario.
+     * @return {@code true} si se registró el préstamo, o {@code false} si el ejemplar
+     *         está ocupado o el socio no puede pedirlo.
+     * @throws IllegalStateException Si falla el guardado en SQLite.
      */
     public boolean prestarLibro(Calendar p_fechaRetiro, Socio p_socio, Libro p_libro) {
         if (!p_libro.prestado() && p_socio.puedePedir()) {
             Prestamo unPrestamo = new Prestamo(p_fechaRetiro, p_socio, p_libro);
-            p_socio.getPrestamos().add(unPrestamo);
-            p_libro.getPrestamos().add(unPrestamo);
+            
+            this.getRepositorio().guardarPrestamo(unPrestamo);
+            
+            p_socio.agregarPrestamo(unPrestamo);
+            p_libro.agregarPrestamo(unPrestamo);
+            
             return true;
         }
+        
         return false;
     }
 
     /**
-     * Registra la fecha actual como fecha de devolución del préstamo del ejemplar.
+     * Guarda en SQLite la devolución del préstamo activo y luego registra
+     * la fecha actual en la instancia compartida por el socio y el ejemplar.
      *
      * @param p_libro Ejemplar que se devuelve.
-     * @throws LibroNoPrestadoException Si el ejemplar ya está en la biblioteca.
+     * @throws LibroNoPrestadoException Si el ejemplar está disponible.
+     * @throws IllegalStateException Si falla la actualización en SQLite o no se afecta una fila.
      */
     public void devolverLibro(Libro p_libro) throws LibroNoPrestadoException {
         if (p_libro.prestado()) {
             Calendar hoy = new GregorianCalendar();
+            
+            this.getRepositorio().registrarDevolucion(p_libro, hoy);
+            
             p_libro.ultimoPrestamo().registrarFechaDevolucion(hoy);
         } else {
             throw new LibroNoPrestadoException("El libro " + p_libro.getTitulo()
@@ -299,5 +345,55 @@ public class Biblioteca {
             lista += "* " + unDocente.toString() + "\n";
         }
         return lista;
+    }
+    
+    /**
+     * Busca un ejemplar por el identificador asignado en SQLite.
+     *
+     * @param p_id Identificador del ejemplar.
+     * @return Ejemplar encontrado o {@code null} si no está en la colección.
+     */
+    public Libro buscarLibro(int p_id) {
+        for (Libro l: this.getLibros()) {
+            if (l.getId() == p_id) {
+                return l;
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Reconstruye el catálogo de socios, ejemplares y préstamos en las
+     * colecciones de una biblioteca recién creada.
+     *
+     * @throws IllegalStateException Si falla una consulta a SQLite.
+     */
+    public void cargarDesdeBaseDeDatos() {
+        this.getRepositorio().cargarTodo(this);
+    }
+    
+    /**
+     * Calcula el plazo aumentado, lo guarda en SQLite y aplica el aumento en memoria.
+     *
+     * @param p_docente Docente al que se le concede el aumento.
+     * @param p_dias Días que se agregan al plazo actual.
+     * @throws IllegalStateException Si falla la actualización en SQLite o no se afecta una fila.
+     */
+    public void actualizarDiasDocente(Docente p_docente, int p_dias) {
+        int nuevoPlazo = p_docente.getDiasPrestamo() + p_dias;
+        
+        this.getRepositorio().actualizarDiasDocente(p_docente, nuevoPlazo);
+        
+        p_docente.cambiarDiasDePrestamo(p_dias);
+    }
+    
+    /**
+     * Consulta si la tabla de ejemplares está vacía para decidir la precarga.
+     *
+     * @return {@code true} si la tabla de libros no tiene registros.
+     * @throws IllegalStateException Si falla la consulta a SQLite.
+     */
+    public boolean baseDeDatosVacia() {
+        return this.getRepositorio().estaVacia();
     }
 }

@@ -1,25 +1,26 @@
 #BlueJ class context
-#Thu Nov 05 20:47:40 ART 2026
+#Sat Nov 07 22:35:16 ART 2026
 comment0.target=Prestamo
-comment0.text=\r\n Representa el prestamo de un libro a un socio de la biblioteca.\r\n Vincula el libro y el socio, administrando las fechas y su vencimiento.\r\n \r\n @author Tobias Nu\u00F1ez\r\n
+comment0.text=\r\n Representa el pr\u00E9stamo de un ejemplar a un socio y conserva las fechas\r\n de retiro y de devoluci\u00F3n. Una fecha de devoluci\u00F3n ausente indica que\r\n el pr\u00E9stamo sigue activo.\r\n\r\n @author Tobias Nu\u00F1ez\r\n
 comment1.params=p_fechaRetiro p_socio p_libro
 comment1.target=Prestamo(java.util.Calendar, Socio, Libro)
-comment1.text=\r\n Constructor para un prestamo nuevo. Inicia con fecha de devolucion en null (activo).\r\n
+comment1.text=\r\n Crea un pr\u00E9stamo activo con la fecha de devoluci\u00F3n en {@code null}.\r\n\r\n @param p_fechaRetiro Fecha de retiro.\r\n @param p_socio Socio que retira el ejemplar.\r\n @param p_libro Ejemplar que se presta.\r\n
 comment10.target=Libro getLibro()
+comment10.text=\r\n Devuelve el ejemplar vinculado al pr\u00E9stamo.\r\n\r\n @return Ejemplar prestado.\r\n
 comment11.params=p_fecha
 comment11.target=void registrarFechaDevolucion(java.util.Calendar)
-comment11.text=\r\n Registra la fecha en la que se devuelve el ejemplar a la biblioteca.\r\n
+comment11.text=\r\n Actualiza la fecha de devoluci\u00F3n en memoria.\r\n\r\n @param p_fecha Fecha de devoluci\u00F3n que se registra.\r\n
 comment12.params=p_fecha
 comment12.target=boolean vencido(java.util.Calendar)
-comment12.text=\r\n Evalua si el prestamo esta vencido respecto a una fecha dada.\r\n Crea un Calendar nuevo con a\u00F1o/mes/dia de retiro para no modificar la fecha original.\r\n
+comment12.text=\r\n Suma el plazo actual del socio a la fecha de retiro reconstruida a\r\n medianoche y compara ese vencimiento con la fecha recibida.\r\n\r\n @param p_fecha Fecha y hora con las que se comprueba el vencimiento.\r\n @return {@code true} si el instante recibido es posterior al vencimiento.\r\n
 comment13.params=p_fecha
 comment13.target=java.lang.String armarFecha(java.util.Calendar)
-comment13.text=\r\n Formatea la fecha a AAAA/MM/DD o indica si la devolucion sigue pendiente.\r\n
+comment13.text=\r\n Formatea una fecha para el listado y para el guardado en SQLite.\r\n\r\n @param p_fecha Fecha que se formatea, o {@code null} si est\u00E1 pendiente.\r\n @return A\u00F1o, mes y d\u00EDa separados por barras, o la leyenda de pr\u00E9stamo activo.\r\n
 comment14.target=java.lang.String toString()
-comment14.text=\r\n Retorna la informacion del prestamo con el formato requerido.\r\n
+comment14.text=\r\n Describe el pr\u00E9stamo para la consola.\r\n\r\n @return Texto con las fechas, el t\u00EDtulo del ejemplar y el nombre del socio.\r\n
 comment2.params=p_fechaRetiro p_fechaDevolucion p_socio p_libro
 comment2.target=Prestamo(java.util.Calendar, java.util.Calendar, Socio, Libro)
-comment2.text=\r\n Constructor sobrecargado para prestamos con fecha de devolucion ya registrada.\r\n
+comment2.text=\r\n Crea un pr\u00E9stamo con las fechas disponibles, por ejemplo al recuperarlo desde SQLite.\r\n\r\n @param p_fechaRetiro Fecha de retiro.\r\n @param p_fechaDevolucion Fecha de devoluci\u00F3n, o {@code null} si sigue activo.\r\n @param p_socio Socio vinculado al pr\u00E9stamo.\r\n @param p_libro Ejemplar vinculado al pr\u00E9stamo.\r\n
 comment3.params=p_fechaRetiro
 comment3.target=void setFechaRetiro(java.util.Calendar)
 comment4.params=p_fechaDevolucion
@@ -29,6 +30,9 @@ comment5.target=void setSocio(Socio)
 comment6.params=p_libro
 comment6.target=void setLibro(Libro)
 comment7.target=java.util.Calendar getFechaRetiro()
+comment7.text=\r\n Devuelve la fecha de retiro.\r\n\r\n @return Fecha de retiro del ejemplar.\r\n
 comment8.target=java.util.Calendar getFechaDevolucion()
+comment8.text=\r\n Devuelve la fecha de devoluci\u00F3n.\r\n\r\n @return Fecha registrada o {@code null} si el pr\u00E9stamo sigue activo.\r\n
 comment9.target=Socio getSocio()
+comment9.text=\r\n Devuelve el socio vinculado al pr\u00E9stamo.\r\n\r\n @return Socio que retir\u00F3 el ejemplar.\r\n
 numComments=15

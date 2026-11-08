@@ -1,0 +1,12 @@
+#BlueJ class context
+#Sat Nov 07 22:35:14 ART 2026
+comment0.target=ConexionBD
+comment0.text=\r\n Abre conexiones JDBC con SQLite y aplica el esquema al iniciar la aplicaci\u00F3n.\r\n Las rutas del archivo de datos y del esquema son relativas a la carpeta de ejecuci\u00F3n.\r\n
+comment1.target=java.sql.Connection obtenerConexion()
+comment1.text=\r\n Abre una conexi\u00F3n con el archivo SQLite y habilita las claves for\u00E1neas\r\n para esa conexi\u00F3n. El m\u00E9todo que recibe la conexi\u00F3n se encarga de cerrarla.\r\n\r\n @return Conexi\u00F3n abierta y configurada.\r\n @throws SQLException Si falla la apertura o la configuraci\u00F3n de la conexi\u00F3n.\r\n
+comment2.target=void inicializarTablas()
+comment2.text=\r\n Lee el esquema l\u00EDnea por l\u00EDnea y conserva los saltos que delimitan los\r\n comentarios SQL. Ejecuta las sentencias completas, incluidas las de creaci\u00F3n\r\n de tablas e \u00EDndice. Cierra la conexi\u00F3n y el lector en el bloque {@code finally}.\r\n\r\n @throws IllegalStateException Si falta el esquema, queda una sentencia incompleta\r\n         o falla la lectura o la ejecuci\u00F3n del SQL.\r\n
+comment3.params=p_con
+comment3.target=void cerrarConexion(java.sql.Connection)
+comment3.text=\r\n Intenta cerrar una conexi\u00F3n abierta. Si el cierre falla, muestra el\r\n mensaje en la consola.\r\n\r\n @param p_con Conexi\u00F3n que se intenta cerrar, o {@code null} si no se abri\u00F3.\r\n
+numComments=4

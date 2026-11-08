@@ -42,6 +42,11 @@ public class Estudiante extends Socio {
         this.carrera = p_carrera;
     }
 
+    /**
+     * Devuelve la carrera del estudiante.
+     *
+     * @return Carrera que cursa.
+     */
     public String getCarrera() {
         return this.carrera;
     }

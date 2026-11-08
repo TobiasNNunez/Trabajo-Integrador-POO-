@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class Libro {
 
     // 1. Atributos - Visibilidad privada
+    private int id;
     private String titulo;
     private int edicion;
     private String editorial;
@@ -32,6 +33,7 @@ public class Libro {
      */
     public Libro(String p_titulo, int p_edicion,
                  String p_editorial, int p_anio) {
+        this.setId(0);
         this.setTitulo(p_titulo);
         this.setEdicion(p_edicion);
         this.setEditorial(p_editorial);
@@ -39,6 +41,25 @@ public class Libro {
         this.setPrestamos(new ArrayList<Prestamo>());
     }
 
+    /**
+     * Constructor sobrecargado para instanciar ejemplares recuperados desde SQLite
+     * asociando su identificador unico de base de datos.
+     *
+     * @param p_id Identificador unico autoincremental de la base de datos.
+     * @param p_titulo Titulo del libro.
+     * @param p_edicion Numero de edicion.
+     * @param p_editorial Editorial del libro.
+     * @param p_anio Anio de publicacion.
+     */
+    public Libro(int p_id, String p_titulo, int p_edicion, String p_editorial, int p_anio) {
+        this.setId(p_id);
+        this.setTitulo(p_titulo);
+        this.setEdicion(p_edicion);
+        this.setEditorial(p_editorial);
+        this.setAnio(p_anio);
+        this.setPrestamos(new ArrayList<Prestamo>());
+    }
+    
     /**
      * Constructor sobrecargado para inicializar un libro con
      * una coleccion de prestamos existente.
@@ -52,15 +73,45 @@ public class Libro {
     public Libro(String p_titulo, int p_edicion,
                  String p_editorial, int p_anio,
                  ArrayList<Prestamo> p_prestamos) {
+        this.setId(0);
         this.setTitulo(p_titulo);
         this.setEdicion(p_edicion);
         this.setEditorial(p_editorial);
         this.setAnio(p_anio);
         this.setPrestamos(p_prestamos);
     }
-
+    
+    /**
+     * Constructor sobrecargado para inicializar un libro con
+     * una coleccion de prestamos existente y un id.
+     *
+     * @param p_id ID del libro.
+     * @param p_titulo Titulo del libro.
+     * @param p_edicion Numero de edicion del libro.
+     * @param p_editorial Editorial del libro.
+     * @param p_anio Anio de publicacion del libro.
+     * @param p_prestamos Coleccion inicial de objetos Prestamo.
+     */
+    public Libro(int p_id, String p_titulo, int p_edicion, String p_editorial, int p_anio, ArrayList<Prestamo> p_prestamos) {
+        this.setId(p_id);
+        this.setTitulo(p_titulo);
+        this.setEdicion(p_edicion);
+        this.setEditorial(p_editorial);
+        this.setAnio(p_anio);
+        this.setPrestamos(p_prestamos);
+    }
+    
     // 3. Mutadores (Setters) - Privados
-
+    
+    /**
+     * Modifica el id, identificador unico de base de datos.
+     * 
+     * @param p_id Numero de ID del libro.
+     */
+    private void setId(int p_id) {
+        this.id = p_id;
+    }
+    
     /**
      * Modifica el titulo del libro.
      *
@@ -107,7 +158,16 @@ public class Libro {
     }
 
     // 4. Observadores (Getters) - Publicos
-
+    
+    /**
+     * Devuelve el identificador del ejemplar en SQLite.
+     *
+     * @return Identificador del ejemplar o {@code 0} si se creó sin asignar un ID.
+     */
+    public int getId() {
+        return this.id;
+    }
+    
     /**
      * Devuelve el titulo del libro.
      *
@@ -156,9 +216,9 @@ public class Libro {
     // 5. Metodos de Gestion de Coleccion
 
     /**
-     * Agrega un prestamo al historial utilizando un nombre alternativo.
+     * Agrega un préstamo al final del historial del ejemplar.
      *
-     * @param p_prestamo Objeto Prestamo a incorporar.
+     * @param p_prestamo Préstamo que se incorpora.
      */
     public void agregarPrestamo(Prestamo p_prestamo) {
         this.getPrestamos().add(p_prestamo);
@@ -223,10 +283,9 @@ public class Libro {
     }
 
     /**
-     * Devuelve una representacion textual del libro,
-     * respetando el formato solicitado en la consigna.
+     * Devuelve el título en el formato utilizado por los listados.
      *
-     * @return Cadena con el formato "Titulo: <titulo>".
+     * @return Cadena con el formato {@code Titulo: <titulo>}.
      */
     @Override
     public String toString() {

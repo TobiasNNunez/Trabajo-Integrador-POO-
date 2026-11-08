@@ -4,9 +4,10 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
- * Representa el prestamo de un libro a un socio de la biblioteca.
- * Vincula el libro y el socio, administrando las fechas y su vencimiento.
- * 
+ * Representa el préstamo de un ejemplar a un socio y conserva las fechas
+ * de retiro y de devolución. Una fecha de devolución ausente indica que
+ * el préstamo sigue activo.
+ *
  * @author Tobias Nuñez
  */
 public class Prestamo {
@@ -16,7 +17,11 @@ public class Prestamo {
     private Libro libro;
 
     /**
-     * Constructor para un prestamo nuevo. Inicia con fecha de devolucion en null (activo).
+     * Crea un préstamo activo con la fecha de devolución en {@code null}.
+     *
+     * @param p_fechaRetiro Fecha de retiro.
+     * @param p_socio Socio que retira el ejemplar.
+     * @param p_libro Ejemplar que se presta.
      */
     public Prestamo(Calendar p_fechaRetiro, Socio p_socio, Libro p_libro) {
         this.setFechaRetiro(p_fechaRetiro);
@@ -26,7 +31,12 @@ public class Prestamo {
     }
 
     /**
-     * Constructor sobrecargado para prestamos con fecha de devolucion ya registrada.
+     * Crea un préstamo con las fechas disponibles, por ejemplo al recuperarlo desde SQLite.
+     *
+     * @param p_fechaRetiro Fecha de retiro.
+     * @param p_fechaDevolucion Fecha de devolución, o {@code null} si sigue activo.
+     * @param p_socio Socio vinculado al préstamo.
+     * @param p_libro Ejemplar vinculado al préstamo.
      */
     public Prestamo(Calendar p_fechaRetiro, Calendar p_fechaDevolucion, Socio p_socio, Libro p_libro) {
         this.setFechaRetiro(p_fechaRetiro);
@@ -51,32 +61,57 @@ public class Prestamo {
         this.libro = p_libro;
     }
 
+    /**
+     * Devuelve la fecha de retiro.
+     *
+     * @return Fecha de retiro del ejemplar.
+     */
     public Calendar getFechaRetiro() {
         return this.fechaRetiro;
     }
 
+    /**
+     * Devuelve la fecha de devolución.
+     *
+     * @return Fecha registrada o {@code null} si el préstamo sigue activo.
+     */
     public Calendar getFechaDevolucion() {
         return this.fechaDevolucion;
     }
 
+    /**
+     * Devuelve el socio vinculado al préstamo.
+     *
+     * @return Socio que retiró el ejemplar.
+     */
     public Socio getSocio() {
         return this.socio;
     }
 
+    /**
+     * Devuelve el ejemplar vinculado al préstamo.
+     *
+     * @return Ejemplar prestado.
+     */
     public Libro getLibro() {
         return this.libro;
     }
 
     /**
-     * Registra la fecha en la que se devuelve el ejemplar a la biblioteca.
+     * Actualiza la fecha de devolución en memoria.
+     *
+     * @param p_fecha Fecha de devolución que se registra.
      */
     public void registrarFechaDevolucion(Calendar p_fecha) {
         this.setFechaDevolucion(p_fecha);
     }
 
     /**
-     * Evalua si el prestamo esta vencido respecto a una fecha dada.
-     * Crea un Calendar nuevo con año/mes/dia de retiro para no modificar la fecha original.
+     * Suma el plazo actual del socio a la fecha de retiro reconstruida a
+     * medianoche y compara ese vencimiento con la fecha recibida.
+     *
+     * @param p_fecha Fecha y hora con las que se comprueba el vencimiento.
+     * @return {@code true} si el instante recibido es posterior al vencimiento.
      */
     public boolean vencido(Calendar p_fecha) {
         int anioRetiro = this.getFechaRetiro().get(Calendar.YEAR);
@@ -90,9 +125,12 @@ public class Prestamo {
     }
 
     /**
-     * Formatea la fecha a AAAA/MM/DD o indica si la devolucion sigue pendiente.
+     * Formatea una fecha para el listado y para el guardado en SQLite.
+     *
+     * @param p_fecha Fecha que se formatea, o {@code null} si está pendiente.
+     * @return Año, mes y día separados por barras, o la leyenda de préstamo activo.
      */
-    private String armarFecha(Calendar p_fecha) {
+    public String armarFecha(Calendar p_fecha) {
         if (p_fecha == null) {
             return "Ejemplar en préstamo";
         }
@@ -103,9 +141,11 @@ public class Prestamo {
         
         return anio + "/" + mes + "/" + dia;
     }
-
+    
     /**
-     * Retorna la informacion del prestamo con el formato requerido.
+     * Describe el préstamo para la consola.
+     *
+     * @return Texto con las fechas, el título del ejemplar y el nombre del socio.
      */
     @Override
     public String toString() {
