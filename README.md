@@ -91,6 +91,25 @@ Las operaciones de escritura guardan primero en SQLite y después actualizan los
 
 [Resumen de persistencia y conceptos JDBC](docs/doc_resumen_persistencia_sqlite.md)
 
+
+## Interfaz gráfica
+
+La aplicación incorpora una interfaz gráfica de usuario (GUI) desarrollada en **Java Swing**, con apoyo de **IntelliJ Swing UI Designer** para el diseño visual. Su implementación se encuentra en `biblioteca/Interfaz.java` y `biblioteca/Interfaz.form`. Permite realizar las operaciones del sistema mediante ventanas, tablas, botones y formularios, como alternativa al menú de consola de `GestionBiblioteca.java`.
+
+La ventana principal organiza las funcionalidades en tres pestañas:
+
+- **Libros:** muestra el catálogo de ejemplares con su ID, título, edición, editorial, año y estado de disponibilidad. Permite registrar y quitar ejemplares, consultar quién tiene prestado un libro y listar los títulos sin repetir.
+- **Socios:** muestra los estudiantes y docentes registrados, incluyendo DNI, nombre, tipo, carrera o área, plazo de préstamo y cantidad de libros prestados. Permite registrar y quitar socios, buscar por DNI, consultar cantidades por tipo, listar docentes responsables y otorgar días adicionales de préstamo a los docentes que cumplan las condiciones.
+- **Préstamos:** presenta los préstamos activos, identificando el ejemplar, el socio, la fecha de retiro y su estado. Permite registrar préstamos, gestionar devoluciones y utilizar el filtro **«Solo vencidos»** para consultar los préstamos fuera de plazo.
+
+Las tablas utilizan `JTable` y `DefaultTableModel`, permiten ordenar los registros por columna y no admiten modificaciones directas. Las operaciones se realizan mediante botones y cuadros de diálogo (`JOptionPane`), con validación de datos, mensajes de confirmación y avisos de error. Una barra de estado informa la cantidad de ejemplares, socios, préstamos activos y préstamos vencidos.
+
+La interfaz utiliza la clase `Biblioteca` para ejecutar las operaciones y aplicar las reglas de negocio, sin duplicar la lógica del sistema. Al iniciarse, establece la conexión con SQLite y recupera los datos almacenados. Después de cada operación realizada correctamente, actualiza las tablas y muestra el estado resultante. Los cambios se guardan mediante las clases del paquete `biblioteca.persistencia`.
+
+Para ejecutar la interfaz gráfica desde BlueJ, ingresá al paquete `biblioteca`, hacé clic derecho sobre la clase `Interfaz` y seleccioná el método `main(String[] args)`, utilizando `{}` como argumento.
+
+[Documentación funcional de la interfaz gráfica](docs/doc_resumen_interfaz_grafica.md)
+
 ## Organización del equipo
 
 | Subgrupo | Clases asignadas |
