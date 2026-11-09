@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
 import biblioteca.persistencia.ConexionBD;
+import java.util.InputMismatchException;
 
 /**
  * Punto de entrada y menú de consola para gestionar la biblioteca.
@@ -40,23 +41,33 @@ public class GestionBiblioteca {
             return;
         }
 
-        int opcion;
-        do {
-            mostrarMenu(unaBiblioteca.getNombre());
-            System.out.print("Seleccione una opción: ");
-            opcion = teclado.nextInt();
-            teclado.nextLine();
-            System.out.println();
-            
-            try {
-                ejecutarOpcion(unaBiblioteca, teclado, opcion);
-            } catch (IllegalStateException e) {
-                System.out.println(e.getMessage());
-            }
-        } while (opcion != 0);
+        
+    int opcion = -1;
 
-        System.out.println("Fin de la gestión de la biblioteca.");
+    do {
+        mostrarMenu(unaBiblioteca.getNombre());
+        System.out.print("Seleccione una opción: ");
+
+    try {
+        opcion = teclado.nextInt();
+        teclado.nextLine();
+        System.out.println();
+
+        ejecutarOpcion(unaBiblioteca, teclado, opcion);
+
+    } catch (InputMismatchException e) {
+        System.out.println("Entrada inválida. Debe ingresar un número entero.");
+        teclado.nextLine();
+        opcion = -1;
+
+    } catch (IllegalStateException e) {
+        System.out.println(e.getMessage());
     }
+
+    } while (opcion != 0);
+
+    System.out.println("Fin de la gestión de la biblioteca.");
+
 
     /**
      * Muestra las operaciones disponibles en el menú principal.
