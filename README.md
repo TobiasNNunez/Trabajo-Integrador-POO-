@@ -14,7 +14,7 @@ Aplicación Java con menú gráfico Swing y menú de consola para administrar ej
 - Nuñez Tobias Nahuel
 - Otero Emmanuel David
 - Prieto Cesar Gabriel
-- Elias Torres
+- Torres Martino Elias Joaquin
 
 ## Funciones del menú
 
