@@ -67,7 +67,7 @@ public class GestionBiblioteca {
     } while (opcion != 0);
 
     System.out.println("Fin de la gestión de la biblioteca.");
-
+    }
 
     /**
      * Muestra las operaciones disponibles en el menú principal.
