@@ -1,3 +1,4 @@
+
 # TP7 — Trabajo Integrador de Programación Orientada a Objetos
 
 ## Gestión de Biblioteca
@@ -33,7 +34,7 @@ Para quitar un ejemplar o un socio desde la interfaz gráfica, seleccioná su fi
 ## Estructura del proyecto
 
 ```text
-TP7/
+raíz-del-proyecto/
 ├── package.bluej                       # Proyecto de BlueJ
 ├── README.md
 ├── README.TXT                          # Cómo ejecutar los dos menús desde BlueJ
@@ -53,15 +54,26 @@ TP7/
 │       ├── RepositorioBiblioteca.java  # Consultas, escrituras y carga de objetos
 │       ├── schema.sql
 │       └── sqlite-jdbc-3.54.1.0.jar
-└── docs/                              # Documentación por clase y resumen persistencia
+├── doc/                                # JavaDoc HTML generado desde BlueJ
+│   ├── index.html                      # Página de inicio de la documentación JavaDoc
+│   └── biblioteca/                     # Documentación HTML de las clases y paquetes
+└── docs/                               # Informes técnicos y documentación complementaria en Markdown
 ```
 
 Los archivos `package.bluej` de los paquetes y los `.ctxt` guardan información del entorno BlueJ. Las clases del modelo y el menú pertenecen a `biblioteca`. Las clases de acceso a datos están en el subpaquete `biblioteca.persistencia`.
 
+### Documentación del proyecto
+
+- **[`doc/`](doc/index.html):** documentación de referencia de las clases y métodos en formato HTML, generada automáticamente a partir de los comentarios JavaDoc (`/** ... */`) del código fuente mediante BlueJ. Para consultarla, abrí `doc/index.html` en un navegador web. Se incluyen las páginas de las clases, sus constructores, métodos y relaciones de paquetes.
+
+- **[`docs/`](docs/):** documentación complementaria redactada por el equipo en archivos Markdown (`.md`). Incluye explicaciones de implementación por clase, cambios incorporados para la persistencia, detalles de JDBC y SQLite, y documentación de la interfaz gráfica.
+
+Las dos carpetas se incluyen para facilitar la revisión: `doc/` permite consultar la documentación técnica generada desde Java y `docs/` registra las decisiones y explicaciones del desarrollo.
+
 ## Ejecución en BlueJ
 
-1. Abrí la carpeta `TP7`, que contiene el archivo `package.bluej`.
-2. Configurá el driver `biblioteca/persistencia/sqlite-jdbc-3.54.1.0.jar` en **Preferencias → Librerías** y reiniciá BlueJ. También podés colocar una copia del JAR en una carpeta `+libs` en la raíz de `TP7` antes de abrir el proyecto. [FAQ de BlueJ](https://bluej.org/faq.html)
+1. Abrí la carpeta raíz del proyecto (en el ZIP se llama `Trabajo-Integrador-POO--main`), que contiene el archivo `package.bluej`.
+2. Configurá el driver `biblioteca/persistencia/sqlite-jdbc-3.54.1.0.jar` en **Preferencias → Librerías** y reiniciá BlueJ. También podés colocar una copia del JAR en una carpeta `+libs` en la raíz del proyecto antes de abrir el proyecto. [FAQ de BlueJ](https://bluej.org/faq.html)
 3. Entrá al paquete `biblioteca` y compilá el proyecto.
 4. Elegí uno de los dos ejecutables del proyecto. Hacé clic derecho en la clase, seleccioná `main(String[] args)` y aceptá `{}`. `GestionBiblioteca` abre la consola de BlueJ e `Interfaz` abre el menú gráfico con las pestañas **Libros**, **Socios** y **Préstamos**.
 
@@ -90,3 +102,12 @@ Las operaciones de escritura guardan primero en SQLite y después actualizan los
 | Equipo completo | `GestionBiblioteca` e integración |
 
 La consigna organiza el seguimiento en Trello mediante cuatro listas. **Lista de tareas** reúne las actividades y responsables. **En proceso** registra el desarrollo. **Auditoría** reúne las observaciones de revisión. **Hecho** registra las tareas revisadas. Git y GitHub se usan para el control de versiones.
+
+## Enlaces de trabajo colaborativo
+
+- **[Tablero de Trello — TP7 Integrador POO](https://trello.com/b/sX7FR0kO/tp7-integrador-poo):** organización de las tareas, responsables, estados de avance y auditoría.
+- **[Repositorio de GitHub — Trabajo Integrador POO](https://github.com/TobiasNNunez/Trabajo-Integrador-POO-):** código fuente, documentación y seguimiento de versiones del equipo.
+
+## Enlace de ficha autoevaluativa grupal
+- **[Ficha Autoevaluativa Grupal](https://github.com/TobiasNNunez/Trabajo-Integrador-POO-/blob/main/docs/Ficha%20Autoevaluacion%20Grupal.docx.pdf):** documento PDF
+realizado por los estudiantes del grupo.
