@@ -105,14 +105,6 @@ public class Prestamo {
     public void registrarFechaDevolucion(Calendar p_fecha) {
         this.setFechaDevolucion(p_fecha);
     }
-
-    /**
-     * Suma el plazo actual del socio a la fecha de retiro reconstruida a
-     * medianoche y compara ese vencimiento con la fecha recibida.
-     *
-     * @param p_fecha Fecha y hora con las que se comprueba el vencimiento.
-     * @return {@code true} si el instante recibido es posterior al vencimiento.
-     */
     
 /**
  * Comprueba si el día recibido es posterior al día
