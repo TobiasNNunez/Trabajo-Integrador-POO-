@@ -113,16 +113,35 @@ public class Prestamo {
      * @param p_fecha Fecha y hora con las que se comprueba el vencimiento.
      * @return {@code true} si el instante recibido es posterior al vencimiento.
      */
-    public boolean vencido(Calendar p_fecha) {
-        int anioRetiro = this.getFechaRetiro().get(Calendar.YEAR);
-        int mesRetiro = this.getFechaRetiro().get(Calendar.MONTH);
-        int diaRetiro = this.getFechaRetiro().get(Calendar.DAY_OF_MONTH);
-        
-        Calendar fechaVencimiento = new GregorianCalendar(anioRetiro, mesRetiro, diaRetiro);
-        fechaVencimiento.add(Calendar.DATE, this.getSocio().getDiasPrestamo());
-        
-        return p_fecha.after(fechaVencimiento);
-    }
+    
+/**
+ * Comprueba si el día recibido es posterior al día
+ * de vencimiento del préstamo.
+ *
+ * @param p_fecha Fecha que se desea consultar.
+ * @return true si el préstamo está vencido,
+ *         false en caso contrario.
+ */
+public boolean vencido(Calendar p_fecha) {
+    Calendar fechaVencimiento = new GregorianCalendar(
+        this.getFechaRetiro().get(Calendar.YEAR),
+        this.getFechaRetiro().get(Calendar.MONTH),
+        this.getFechaRetiro().get(Calendar.DAY_OF_MONTH)
+    );
+
+    fechaVencimiento.add(
+        Calendar.DATE, this.getSocio().getDiasPrestamo()
+    );
+
+    Calendar fechaConsulta = new GregorianCalendar(
+        p_fecha.get(Calendar.YEAR),
+        p_fecha.get(Calendar.MONTH),
+        p_fecha.get(Calendar.DAY_OF_MONTH)
+    );
+
+    return fechaConsulta.after(fechaVencimiento);
+}
+
 
     /**
      * Formatea una fecha para el listado y para el guardado en SQLite.
